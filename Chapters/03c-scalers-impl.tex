@@ -1,0 +1,171 @@
+\subsubsection{Scaling Data}
+The purpose of this section is to scale all of the data to the same scale. Previously utilized scaling method of natural logarithm log(e) didn't apply to all data points.
+
+The following scaling methods will be applied sequentially to all data points subsequently used in the analysis:
+\begin{itemize}
+    \item Min Max
+    \item Max Abs
+    \item Standard
+    \item Power Transformer using Yeo-Johnson method - even though Box-Cox method should suffice as all data points are positive numbers
+    \item Quantile Normal - Gaussian
+    \item Quantile Uniform
+\end{itemize}
+
+Data frames containing scaled data will be compiled into a reference map for easy lookup of data.
+
+Following scaled data collection, standard deviation for each column for each of the methods will be compared to check the data distribution. Decided on a numerical method as compiling graphs for all of 6 scaling methods times 41 features would be inefficient. Graphs may be compiled for illustrating the some of the distribution improvements.
+
+Finally, each scaled dataset will be used in Logistic Regression and Decision Tree Algorithm for analysis.
+\paragraph{Initial Setup}
+\begin{code}
+\captionof{listing}{Initial setup - constants}
+\label{code:scalers:setup}
+\begin{minted}[breaklines]{python}
+# Constants
+unmod_key='unmodified'
+min_max_key='min-max'
+max_abs_key = 'max-abs'
+standard_key='standard'
+yeo_johnson_key='power-yeo-johnson'
+quantile_normal_key='quantile-normal'
+quantile_uniform_key='quantile-uniform'
+
+methods_order=[unmod_key, min_max_key, max_abs_key,standard_key, yeo_johnson_key, quantile_normal_key, quantile_uniform_key]
+
+scaled_data_ref_map_downscaled={}
+scaled_data_ref_map_upscaled={}
+\end{minted}
+\end{code}
+\paragraph{Executing Scalers}
+Executing and fitting all scalers to the dataset provided. Target column and well as text data columns have been dropped from scaling analysis.
+
+Text columns dropped are pertaining to:
+\begin{itemize}
+    \item author
+    \item previous author
+    \item issue key
+    \item file path
+    \item source repository
+\end{itemize}
+
+All of the above have been retained in the dataset only for verification purposes to make sure that any transformed data point can be tracked back to its original state.
+
+\begin{code}
+\captionof{listing}{Initial setup - getting datasets and removal of text columns}
+\label{code:scalers:setup-of-objects-and-drop-text-cols}
+\begin{minted}[breaklines]{python}
+df_upsampled, df_downsampled = get_up_and_downsample_df(df_transformed, 'is_bug', 123, [0,1])
+
+X = df_downsampled.drop(['author', 'prev_author', 'issue_key', 'file_path', 'source_repo', 'is_bug'], axis=1)
+y = df_downsampled['is_bug']
+
+X_up = df_upsampled.drop(['author', 'prev_author', 'issue_key', 'file_path', 'source_repo', 'is_bug'], axis=1)
+y_up = df_upsampled['is_bug']
+
+# Initializing the unmodified data frame in reference map
+scaled_data_ref_map_downscaled[unmod_key]=X.copy(deep=True)
+scaled_data_ref_map_upscaled[unmod_key]=X_up.copy(deep=True)
+\end{minted}
+\end{code}
+
+\begin{landscape}
+\begin{code}
+\captionof{listing}{Initial setup - getting datasets and removal of text columns}
+\label{code:scalers:execute-scalers}
+\begin{minted}[breaklines]{python}
+# Min Max scaler
+scaler = MinMaxScaler()
+x_scaled = scaler.fit_transform(X)
+x_upscaled = scaler.fit_transform(X_up)
+
+scaled_data_ref_map_downscaled[min_max_key]=pd.DataFrame(x_scaled, columns=X.columns)
+scaled_data_ref_map_upscaled[min_max_key]=pd.DataFrame(x_upscaled, columns=X_up.columns)
+
+# Max Abs scaler
+
+# resetting X to default state
+X = df_downsampled.drop(['author', 'prev_author', 'issue_key', 'file_path', 'source_repo', 'is_bug'], axis=1)
+X_up = df_upsampled.drop(['author', 'prev_author', 'issue_key', 'file_path', 'source_repo', 'is_bug'], axis=1)
+
+scaled_data_ref_map_downscaled[max_abs_key]=pd.DataFrame(MaxAbsScaler().fit_transform(X), columns=X.columns)
+scaled_data_ref_map_upscaled[max_abs_key]=pd.DataFrame(MaxAbsScaler().fit_transform(X_up), columns=X_up.columns)
+
+# Standard Scaler
+
+# resetting X to default state
+X = df_downsampled.drop(['author', 'prev_author', 'issue_key', 'file_path', 'source_repo', 'is_bug'], axis=1)
+X_up = df_upsampled.drop(['author', 'prev_author', 'issue_key', 'file_path', 'source_repo', 'is_bug'], axis=1)
+
+scaled_data_ref_map_downscaled[standard_key]=pd.DataFrame(StandardScaler(with_mean=False).fit_transform(X), columns=X.columns)
+scaled_data_ref_map_upscaled[standard_key]=pd.DataFrame(StandardScaler(with_mean=False).fit_transform(X_up), columns=X_up.columns)
+
+# Power Transformer - Yeo-Johnson method
+
+# resetting X to default state
+X = df_downsampled.drop(['author', 'prev_author', 'issue_key', 'file_path', 'source_repo', 'is_bug'], axis=1)
+X_up = df_upsampled.drop(['author', 'prev_author', 'issue_key', 'file_path', 'source_repo', 'is_bug'], axis=1)
+
+scaled_data_ref_map_downscaled[yeo_johnson_key]=pd.DataFrame(PowerTransformer(method='yeo-johnson').fit_transform(X), columns=X.columns)
+scaled_data_ref_map_upscaled[yeo_johnson_key]=pd.DataFrame(PowerTransformer(method='yeo-johnson').fit_transform(X_up), columns=X_up.columns)
+
+
+# Quantile Transformation - Normal
+
+# resetting X to default state
+X = df_downsampled.drop(['author', 'prev_author', 'issue_key', 'file_path', 'source_repo', 'is_bug'], axis=1)
+X_up = df_upsampled.drop(['author', 'prev_author', 'issue_key', 'file_path', 'source_repo', 'is_bug'], axis=1)
+
+scaled_data_ref_map_downscaled[quantile_normal_key]=pd.DataFrame(QuantileTransformer(output_distribution='normal').fit_transform(X), columns=X.columns)
+scaled_data_ref_map_upscaled[quantile_normal_key]=pd.DataFrame(QuantileTransformer(output_distribution='normal').fit_transform(X_up), columns=X_up.columns)
+
+# Quantile Transformation - Uniform
+
+# resetting X to default state
+X = df_downsampled.drop(['author', 'prev_author', 'issue_key', 'file_path', 'source_repo', 'is_bug'], axis=1)
+X_up = df_upsampled.drop(['author', 'prev_author', 'issue_key', 'file_path', 'source_repo', 'is_bug'], axis=1)
+
+scaled_data_ref_map_downscaled[quantile_uniform_key]=pd.DataFrame(QuantileTransformer(output_distribution='uniform').fit_transform(X), columns=X.columns)
+scaled_data_ref_map_upscaled[quantile_uniform_key]=pd.DataFrame(QuantileTransformer(output_distribution='uniform').fit_transform(X_up), columns=X_up.columns)
+\end{minted}
+\end{code}
+\end{landscape}
+
+\paragraph{Comparing variance per column for each method}
+Verifying that column variance for each of the scaler methods have been reduced on per column basis as well as mean and median standard deviation for each of the methods investigated. Overall it is reasonable to surmise that the variance have improved by a factor of approximately 200 (!!) per method implemented.
+
+For some of the features the variance decrease can be even more dramatic, for example it uncovered lines feature originally had variance of a little over 1400, however, after scaling methods were applied it was reduced to single digit value.
+
+\begin{code}
+\captionof{listing}{Initial setup - getting datasets and removal of text columns}
+\label{code:scalers:getting-metrics-downsample}
+\begin{minted}[breaklines]{python}
+print('Statistics for scaled dataset created by downsampling')
+for method in scaled_data_ref_map_downscaled.keys():
+    avg=np.average(scaled_data_ref_map_downscaled[method].describe().std())
+    print('Average std for, {0},\t\t\t {1}'.format(method, avg))
+    
+for method in scaled_data_ref_map_downscaled.keys():
+    med = np.median(scaled_data_ref_map_downscaled[method].describe().std())
+    print('Median std for, {0},\t\t\t {1}'.format(method, med))
+    \end{minted}
+\end{code}
+
+\begin{code}
+\captionof{listing}{Initial setup - getting datasets and removal of text columns}
+\label{code:scalers:getting-metrics-upsample}
+\begin{minted}[breaklines]{python}
+
+print('Statistics for scaled dataset created by upsampling')
+for method in scaled_data_ref_map_upscaled.keys():
+    avg=np.average(scaled_data_ref_map_upscaled[method].describe().std())
+    print('Average std for, {0},\t\t\t {1}'.format(method, avg))
+    
+for method in scaled_data_ref_map_upscaled.keys():
+    med = np.median(scaled_data_ref_map_upscaled[method].describe().std())
+    print('Median std for, {0},\t\t\t {1}'.format(method, med))
+        \end{minted}
+\end{code}
+
+Data series containing variance metrics for un-scaled, or unmodified data, has been removed as it was making it impossible to observe variance changes in scaled data due to its magnitude. Additionally when visualizing variance for unmodified data \fileAgeInSec{} feature has been removed as its extreme value was overshadowing all other variance metrics making them appear the same in magnitude.
+
+Variance data for all scaling methods has been compiled into a single dataset for easy manipulation and visualization. Below it can be observed from the table that any scaling method decreased data variance metric significantly.

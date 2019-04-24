@@ -16,10 +16,83 @@
 
 % additional packages
 \usepackage{todonotes}
-\usepackage{booktabs}
-\usepackage{multicol}
-\usepackage[newfloat]{minted}
-\usepackage{pdflscape}
+\usepackage{booktabs} % table border formatting
+\usepackage{multicol} 
+\usepackage[newfloat]{minted} % code syntax highlighting
+\usepackage{pdflscape} 
+\usepackage{textgreek} % support for greek letters
+\usepackage[section]{placeins} % floatbarrier
+\usepackage[export]{adjustbox} % figure placement adjustments
+\usepackage{hyperref} % URL highlights
+%\usepackage[colorlinks=true, allcolors=blue]{hyperref} %URL colouring
+
+% treating paragraphs as sections by adding headings to them
+\usepackage{titlesec}
+
+\setcounter{secnumdepth}{4}
+
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+\newcommand{\figpath}{Figures}
+\newcommand{\figCorrPath}{\figpath/correlation}
+\newcommand{\totalRows}{6547}
+\newcommand{\totalJavaRows}{4239}
+\newcommand{\totalJavaScriptRows}{2308}
+\newcommand{\totalDiscardedRows}{2985}
+\newcommand{\javaDiscardedRows}{2126}
+\newcommand{\jsDiscardedRows}{859}
+\newcommand{\totalDeletedFiles}{432}
+\newcommand{\remainingJavaFileCount}{2113}
+\newcommand{\remainingJsFileCount}{1449}
+\newenvironment{code}{\captionsetup{type=listing}}{}
+\SetupFloatingEnvironment{listing}{name=Source Code}
+
+\newcommand{\overallBranchCoverage}{\texttt{overall\_branch\_coverage}}
+\newcommand{\branchCoverage}{\texttt{branch\_coverage}}
+\newcommand{\overallCoverage}{\texttt{overall\_coverage}}
+\newcommand{\overallLineCoverage}{\texttt{overall\_line\_coverage}}
+\newcommand{\overallUncoveredConditions}{\texttt{overall\_uncovered\_conditions}}
+\newcommand{\overallUncoveredLines}{\texttt{overall\_uncovered\_lines}}
+\newcommand{\coverage}{\texttt{coverage}}
+\newcommand{\lineCoverage}{\texttt{line\_coverage}}
+\newcommand{\uncoveredConditions}{\texttt{uncovered\_conditions}}
+\newcommand{\uncoveredLines}{\texttt{uncovered\_lines}}
+\newcommand{\isBug}{\texttt{is\_bug}}
+\newcommand{\fileAgeInSec}{\texttt{file\_age\_in\_sec}}
+\newcommand{\lines}{\texttt{lines}}
+\newcommand{\files}{\texttt{files}}
+\newcommand{\timestamp}{\texttt{timestamp}}
+\newcommand{\prevTimestamp}{\texttt{prev\_timestamp}}
+
+\newcommand{\sqaleDebt}{\texttt{sqale\_debt}}
+\newcommand{\statements}{\texttt{statements}}
+\newcommand{\violations}{\texttt{violations}}
+\newcommand{\issueKey}{\texttt{issue\_key}}
+\newcommand{\sourceRepository}{\texttt{source\_repository}}
+\newcommand{\filePath}{\texttt{file\_path}}
+\newcommand{\authorAttrib}{\texttt{author}}
+\newcommand{\prevAuthorAttrib}{\texttt{prev\_author}}
+
+\newcommand{\complexity}{\texttt{complexity}}
+\newcommand{\commentLines}{\texttt{comment\_lines}}
+\newcommand{\linesToCover}{\texttt{lines\_to\_cover}}
+\newcommand{\fileComplexity}{\texttt{file\_complexity}}
+\newcommand{\functionComplexity}{\texttt{function\_complexity}}
+\newcommand{\ncloc}{\texttt{ncloc}}
+\newcommand{\functions}{\texttt{functions}}
+\newcommand{\openIssues}{\texttt{open\_issues}}
+\newcommand{\codeSmells}{\texttt{code\_smells}}
+\newcommand{\infoViolations}{\texttt{info\_violations}}
+\newcommand{\minorViolations}{\texttt{minor\_violations}}
+\newcommand{\majorViolations}{\texttt{major\_violations}}
+\newcommand{\duplicatedBlocks}{\texttt{duplicated\_blocks}}
+\newcommand{\duplicatedFiles}{\texttt{duplicated\_files}}
+\newcommand{\duplicatedLines}{\texttt{duplicated\_lines}}
+
+
 
 \hypersetup{urlcolor=black, colorlinks=true}  % Colours hyperlinks in black, can be distracting if there are many links and colored blue.
 
@@ -91,7 +164,7 @@ Date:\\
 (200 words)
 
 It has been estimated that software maintenance takes up to approximately two-thirds of a software's life cycle, inducing defect, or bug, detection, investigation and finally resolution. As it currently stands, bug detection is primarily a human-driven process, which by its very definition is prone to human error. The following sections will outline exploration of the possibility of utilizing machine learning algorithms in order to develop a system predicting code defects based on static code analysis metrics. The analysis is geared specifically towards applications developed using microservices architecture and following continuous deployment principles. The motivation to conduct such research is to provide software engineers with a suitable tool for verifying their applications in fast-paced development environments. The focus of the research is directed at microservices and CD practices due to previous research conducted for monolithic architectures following manual deployment process. While the focus of the research will be on proving out prediction model, additionally, the weight of the metrics, such as software's architecture and deployment strategy will also be investigated.
-Completed prediction model would provide a machine-automated approach to bug detection, one providing an additional level of confidence and potentially reducing time to market for products utilizing it.
+Completed prediction model would provide a machine-automated approach to bug detection, one providing an additional level of confidence and potentially reducing time to market for products utilizing it.\todo{probably needs a mention of the conclusion as well}
 }
 
 \clearpage  % Abstract ended, start a new page
