@@ -148,8 +148,10 @@ def down_sample_majority_class(df_majority, df_minority, rnd_state):
 \end{landscape}
 
 \subsubsection{Feature Distribution}\label{sec:impl-data-analysis:feature-dist}
+\todo{fill it out}
 
 \subsubsection{Outliers}\label{sec:impl-data-analysis:outliers}
+\todo{fill it out}
 
 \subsubsection{Data Correlation}\label{sec:impl-data-analysis:corr:generic-approach}
 The following section will focus on identifying data correlation between features present in the dataset. The methods employed will be both numerical and visual. Numerical method has been employed for brevity and as verification for the visual method as it believed that with 40+ features it will be quite cumbersome to distinguish between high and low correlation values in a matrix.
@@ -278,11 +280,11 @@ The first subplot to be analyzed was populated with features relating to code co
 \end{itemize}
 and it's correlation statistics can be observed in Figure \ref{fig:correlation-coverage-metrics-subplot}. From the same graph, 4 candidates for feature transformation into a single feature due to high positive correlation with one another can be identified:
 \begin{enumerate}\label{lst:corr-sub:code-coverage-transf-candidates}
-    \item Candidate 1: \overallBranchCoverage{} and \branchCoverage{}
-    \item Candidate 2: \overallUncoveredLines{} and \uncoveredLines{}
-    \item Candidate 3: \overallCoverage{}, \overallLineCoverage{}, \coverage{} and \lineCoverage{}
-    \item Candidate 4: \overallUncoveredConditions and \uncoveredConditions{}
-\end{enumerate}
+    \item \overallBranchCoverage{} and \branchCoverage{}
+    \item \overallUncoveredLines{} and \uncoveredLines{}
+    \item \overallCoverage{}, \overallLineCoverage{}, \coverage{} and \lineCoverage{}
+    \item \overallUncoveredConditions and \uncoveredConditions{}
+\suspend{enumerate}
 
 \begin{figure}[h!]
     \centering
@@ -369,22 +371,21 @@ The last feature transformation will be conducted between \overallUncoveredCondi
 
 \FloatBarrier
 %%%%%%%%%%%%%%%%%%%%%%%%%5
-All features investigated in this section have displayed high positive relationship with one another, very strong linear relationship as well as almost perfectly aligned data distribution. Therefore, only 4 of the 10 attributes, enumerated in section \ref{lst:code-coverage-candidates}, have been retained:
+\textbf{In conclusion} all features investigated in this section have displayed high positive relationship with one another, very strong linear relationship as well as almost perfectly aligned data distribution. Therefore, only 4 of the 10 attributes, enumerated in section \ref{lst:code-coverage-candidates}, have been retained:
 
-\begin{enumerate}
+\begin{itemize}
     \item \overallBranchCoverage{}
     \item \overallUncoveredLines{}
     \item \overallCoverage{}
     \item \overallUncoveredConditions{}
-\end{enumerate}
+\end{itemize}
 
 \paragraph{Line and complexity features}\label{sec:impl-data-analysis:corr:line-and-complexity}
 In the following section a number off attributes will be investigated with regards to the possibility of transforming said features and reducing dimensionality of the overall dataset. Given a sub plot of a heatmap presented in Figure \ref{fig:correlation-line-metrics-subplot} the attributes under analysis are, based on their high correlation:
-\begin{enumerate}
-    \item Candidate 5: \complexity{}, \functionComplexity{}
-    \item Candidate 6: \statements{}, \linesToCover{}
-    \item Candidate 7: \ncloc{}, \lines{}
-\end{enumerate}
+\resume{enumerate}
+    \item \complexity{}, \fileComplexity{}    \item \statements{}, \linesToCover{}
+    \item \ncloc{}, \lines{}
+\suspend{enumerate}
 It is worth noting that despite similar naming \functionComplexity{} metric does not display a strong correlation with the other two complexity metrics and was not included  as part of Candidate 5.
 
 The numbering of feature transformation candidates is being continued from previous section, where candidates 1 through 4 were discussed.
@@ -400,7 +401,7 @@ Starting with Candidate 5, in Figure \ref{fig:candidate5-pairplot}, it can be ob
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[scale=0.8]{Figures/correlation/Attribute_Relationship_in_Candidate_5.png}
+    \includegraphics[scale=0.7]{Figures/correlation/Attribute_Relationship_in_Candidate_5.png}
     \caption{Relationship between \complexity{} and \fileComplexity{} attributes}
     \label{fig:candidate5-pairplot}
 \end{figure}
@@ -432,7 +433,7 @@ In the next feature transformation candidate, numbered seventh, the relationship
 
 \begin{figure}
     \centering
-    \includegraphics[scale=0.8]{Figures/correlation/Attribute_Relationship_in_Candidate_7.png}
+    \includegraphics[scale=0.7]{Figures/correlation/Attribute_Relationship_in_Candidate_7.png}
     \caption{Relationship between \ncloc{} and \lines{} Attributes}
     \label{fig:candidate7-scatterplot}
 \end{figure}
@@ -445,61 +446,110 @@ In the next feature transformation candidate, numbered seventh, the relationship
 \end{figure}
 
 
-In order to further the analysis of the  candidates, given the high correlation between a number of features, a number of three dimensional plots was developed in order to better illustrate the relationship between multiple attributes at a time.
+In order to further the analysis of the candidates, given the high correlation between a number of features, a number of three dimensional plots was developed. They serve to better illustrate the relationship between multiple attributes at a time than multiple two dimensional plots.
 
-From Figure \ref{fig:3d:ncloc-linesToCover-statements} it can be observed that there is an almost perfect linear relationship between \statements{}, \ncloc{} and \lines{} attributes- and this stands to reason as all three metrics wold be used to describe source code, with the distinction of \lines{} attribute covering both comment and source code lines in any file.
+From Figure \ref{fig:3d:ncloc-linesToCover-statements} it can be observed that there is an almost perfect linear relationship between \statements{}, \ncloc{} and \lines{} attributes- and this stands to reason as all three metrics would be used to describe source code, with the distinction of \lines{} attribute covering both comment and source code lines in any file. This relationship can also be viewed in Figure \ref{fig:3d:statements-lines-commentLines}, where it can be observed that the higher the number of lines the higher the number of both \statements{} and \commentLines{}. The divergence of a small portion of \lines{} attribute from the main graph line is attributed to growing number of comment lines in the code as opposed to source ones, as covered by \statements{}. This divergence points to different regression lines for \lines{} vs\commentLines{} as well as \lines{} and \statements{}, therefore those 3 are not equivalent and will not be folded up into a single metric.
 \begin{figure}[!h]
     \centering
-    \includegraphics[scale=0.7]{Figures/three-d/Correlation-between-attributes-ncloc-lines_to_cover-statements.png}
+    \includegraphics[scale=0.65]{Figures/three-d/Correlation-between-attributes-ncloc-lines_to_cover-statements.png}
     \caption{Relationship between multiple attributes}
     \label{fig:3d:ncloc-linesToCover-statements}
 \end{figure}
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[scale=0.7]{Figures/three-d/Correlation-between-attributes-statements-lines-comment_lines.png}
+    \includegraphics[scale=0.65]{Figures/three-d/Correlation-between-attributes-statements-lines-comment_lines.png}
     \caption{Relationship between multiple attributes}
     \label{fig:3d:statements-lines-commentLines}
 \end{figure}
 
+In the exploration of the trends, a plot depicting relationship between \lines{}, \fileComplexity{} and \commentLines{} has been devised, as it is commonly thought that the more complex the code the more lines of comments and other documentation should be encountered. The results can be seen in Figure \ref{fig:3d:fileComplexity-lines-commentLines} and from the dataset gathered it looks that the hypothesis holds true, there is a correlation between the complexity of a file, its size in absolute terms - represented in the \lines{} attribute, and the number of comments in a given file. 
+However, while the trend is present, those metrics are not equivalent and it has been decided against combining them into a single metric.
 \begin{figure}[!h]
     \centering
-    \includegraphics[scale=0.7]{Figures/three-d/Correlation-between-attributes-file_complexity-lines-comment_lines.png}
+    \includegraphics[scale=0.65]{Figures/three-d/Correlation-between-attributes-file_complexity-lines-comment_lines.png}
     \caption{Relationship between multiple attributes}
     \label{fig:3d:fileComplexity-lines-commentLines}
 \end{figure}
 
 \FloatBarrier
 \textbf{In Conclusion} from the features listed at the beginning of this section it has been sufficiently determined that the following pairs can be safely transformed into a single feature:
-\begin{enumerate}
+\begin{itemize}
     \item \complexity{} and \fileComplexity{} - linear relationship and similar looking distribution
     \item \statements{} and \linesToCover{} - linear relationship and approximately the same distribution
     \item \lines{} and \ncloc{} quite a linear relationship, similar distribution between all.
-\end{enumerate}
+\end{itemize}
 
 The \complexity{}, \linesToCover{} and \ncloc{} have been retained while their corresponding pairs have been removed from further analysis.
 \FloatBarrier
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{Sonar Violation Metrics}\label{sec:impl-data-analysis:corr:sonar-violations}
-
-\begin{figure}
+\begin{figure}[!h]
     \centering
-    \includegraphics[scale=0.9]{Figures/correlation/Sonar_Violations_Correlation.png}
+    \includegraphics[scale=0.7]{Figures/correlation/Sonar_Violations_Correlation.png}
     \caption{Sonar Violation Metrics Correlation Subplot}
     \label{fig:correlation-sonar-violation-metrics-subplot}
 \end{figure}
 
-\textbf{In conclusion}\todo{Need to save graphs from notebook and paste them in here} 
-the \openIssues{}, \codeSmells{} and \violations features can be transformed into a single feature as they show an indication of a linear relationship and have an identical distribution. As such \violations{} feature will be retained while the other 2 will be dropped from analysis.
+The following section will investigate if the following candidates can be transformed as per Figure \ref{fig:correlation-sonar-violation-metrics-subplot} there is a strong positive correlation between them:
+\resume{enumerate}
+    \item \openIssues{}, \violations{} and \codeSmells{}
+    \item \majorViolations{}, \minorViolations{} and \infoViolations{}
+\suspend{enumerate}
 
-With regards to remaining metrics, no strong opportunity for transformation as the correlation appears to be negative, furthermore, based on business rules, \infoViolations{}, \minorViolations{} and \majorViolations{} metrics are independent of one another.
-\FloatBarrier
-\newpage
+Starting with Candidate 8, the relationship between the attributes appears to be a strong linear one, as can be observed in Figure \ref{fig:3d:candidate8-relationship}. Unfortunately, despite the indications of a strong relationship, there aren't enough data points available to prove it beyond any doubt. The distribution graph, in Figure \ref{fig:candidate8-distribution}, however, clearly states that the distribution of whatever little data points that are available matches perfectly between the three attributes.
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.6]{Figures/correlation/Attribute_Distribution_in_Candidate_8.png}
+    \caption{Distribution of attributes in Candidate 8}
+    \label{fig:candidate8-distribution}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[scale=0.6]{Figures/three-d/Correlation_between_attributes_violations_open_issues_code_smells.png}
+    \caption{Correlation between Sonar violation attributes}
+    \label{fig:3d:candidate8-relationship}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[scale=0.6]{Figures/three-d/Correlation_between_attributes_major_violations_info_violations_minor_violations.png}
+    \caption{Correlation between Sonar violation attributes}
+    \label{fig:3d:candidate9-relationship}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.6]{Figures/correlation/Attribute_Distribution_in_Candidate_9.png}
+    \caption{Distribution of attributes in candidate 9}
+    \label{fig:candidate9-distribution}
+\end{figure}
+
+\textbf{In conclusion} the \openIssues{}, \codeSmells{} and \violations{} features can be transformed into a single feature as they show an indication of a linear relationship and have an identical distribution. As such \violations{} feature will be retained while the other 2 will be dropped from analysis.
+
+A conclusion with regards to remaining metrics is that no strong opportunity for transformation presented itself as there is little defined relationship between the attributes. Furthermore, based on domain knowledge of \infoViolations{}, \minorViolations{} and \majorViolations{} it is concluded that those metrics are independent of one another. 
+
+However, when drawing from the domain knowledge of Sonar metrics, violations is a all encompassing term used for describing any infraction against rules defined as part of the analysis, such as that depicted by \infoViolations{}, \minorViolations{} or \majorViolations{}. As such, it is natural that \violations{} attribute will be closely related to those metrics. Therefore, the only violation describing metric retained will be \violations{}.
+% \FloatBarrier
+
 
 \paragraph{Code Duplication Metrics}\label{sec:impl-data-analysis:corr:code-duplication}
 \begin{figure}
     \centering
     \includegraphics[scale=0.75]{Figures/correlation/Duplication_Metrics_Correlation.png}
+    \caption{Code Duplication Metrics Correlation Subplot}
+    \label{fig:correlation-code-duplication-metrics-subplot}
+\end{figure}
+Based on the correlation graph for code duplication metrics the following candidate has been chosen for the analysis:
+\resume{enumerate}
+    \item \duplicatedBlocks{}, \duplicatedFiles{}, \duplicatedLines{} and \duplicatedLinesDensity{}
+\end{enumerate}
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.75]{Figures/correlation/Attribute_Relationship_in_Duplication_Metrics.png}
     \caption{Code Duplication Metrics Correlation Subplot}
     \label{fig:correlation-code-duplication-metrics-subplot}
 \end{figure}

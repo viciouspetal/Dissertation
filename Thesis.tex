@@ -25,6 +25,7 @@
 \usepackage[export]{adjustbox} % figure placement adjustments
 \usepackage{hyperref} % URL highlights
 %\usepackage[colorlinks=true, allcolors=blue]{hyperref} %URL colouring
+\usepackage{mdwlist} % used for customized resuming of numbering on numbered lists
 
 % treating paragraphs as sections by adding headings to them
 \usepackage{titlesec}
@@ -91,6 +92,7 @@
 \newcommand{\duplicatedBlocks}{\texttt{duplicated\_blocks}}
 \newcommand{\duplicatedFiles}{\texttt{duplicated\_files}}
 \newcommand{\duplicatedLines}{\texttt{duplicated\_lines}}
+\newcommand{\duplicatedLinesDensity}{\texttt{duplicated\_lines\_density}}
 
 
 
@@ -112,7 +114,9 @@
 
 
 \maketitle
-\tableofcontents
+% \listoffigures
+% \listoftables
+
 %% ----------------------------------------------------------------
 
 \setstretch{1.3}  % It is better to have smaller font and larger line spacing than the other way round
@@ -163,10 +167,10 @@ Date:\\
 \addtocontents{toc}{\vspace{1em}}  % Add a gap in the Contents, for aesthetics
 (200 words)
 
-It has been estimated that software maintenance takes up to approximately two-thirds of a software's life cycle, inducing defect, or bug, detection, investigation and finally resolution. As it currently stands, bug detection is primarily a human-driven process, which by its very definition is prone to human error. The following sections will outline exploration of the possibility of utilizing machine learning algorithms in order to develop a system predicting code defects based on static code analysis metrics. The analysis is geared specifically towards applications developed using microservices architecture and following continuous deployment principles. The motivation to conduct such research is to provide software engineers with a suitable tool for verifying their applications in fast-paced development environments. The focus of the research is directed at microservices and CD practices due to previous research conducted for monolithic architectures following manual deployment process. While the focus of the research will be on proving out prediction model, additionally, the weight of the metrics, such as software's architecture and deployment strategy will also be investigated.
+It has been estimated that software maintenance takes up to approximately two-thirds of a software's life cycle, inclucing defect, or bug, detection, investigation and finally resolution. As it currently stands, bug detection is primarily a human-driven process, which by its very definition is prone to human error. The following sections will outline exploration of the possibility of utilizing machine learning algorithms in order to develop a system predicting code defects based on static code analysis metrics. The analysis is geared specifically towards applications developed using microservices architecture and following continuous deployment principles. The motivation to conduct such research is to provide software engineers with a suitable tool for verifying their applications in fast-paced development environments. The focus of the research is directed at microservices and CD practices due to previous research conducted for monolithic architectures following manual deployment process. While the focus of the research will be on proving out prediction model, additionally, the weight of the metrics, such as software's architecture and deployment strategy will also be investigated.
 Completed prediction model would provide a machine-automated approach to bug detection, one providing an additional level of confidence and potentially reducing time to market for products utilizing it.\todo{probably needs a mention of the conclusion as well}
 }
-
+\tableofcontents
 \clearpage  % Abstract ended, start a new page
 \begin{comment}
 %% ----------------------------------------------------------------

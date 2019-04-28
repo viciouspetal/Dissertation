@@ -1,8 +1,16 @@
 \chapter{Results and Observations}\label{chp:results-and-observations}
+\section{Logistic Regression Results}\label{sec:results:log-reg}
+The results for the analysis of both upsampled and downsampled datasets, as well as L1 and L2 regularization methods have been compiled into Table \ref{tbl:results:log-reg}. From same it can be observed that the probability of a valid classification of \isBug{} target variable is between 52\% - 63.9\% between different scaling methods used to normalize given data.
+
+On average the dataset where the up sampling method was used to achieve class balance has provided better results. 
+
+From regularization point of view, L2 was more successful on average.
+
+The probability of class 0 and 1 class, corresponding to a given file being a bug or not, has been consistently averaged at 50\% for each class across all datasets, normalization and regularization methods. 
 \begin{table}[h!]
 \centering
 \caption{Logistic Regression Results}
-\label{tab:results-log-reg}
+\label{tbl:results:log-reg}
 \begin{tabular}{@{}lllll@{}}
 \toprule
  & Up L1 & Down L1 & Up L2 & Down L2 \\ \midrule
@@ -16,10 +24,14 @@ quantile-uniform & 0.609 & 0.571 & 0.625 & 0.625 \\ \bottomrule
 \end{tabular}
 \end{table}
 
+\section{Decision Tree Results}\label{sec:results:decision-tree}
+The results of decision tree classification have been compiled into Table \ref{tbl:results:decision-tree}. From same it can be observed, that similarly to Logistic Regression results in section \ref{sec:results:log-reg}, the upsampled dataset exhibits higher prediction scores. 
+
+The results of the classification analysis would vary from approximately 86\% to just above 88\% for the downsampled dataset and reaching a staggering approximately 99\% accuracy in the upsampled dataset.
 \begin{table}[h!]
 \centering
 \caption{Decision Tree Classification Results}
-\label{tab:results-decision-tree}
+\label{tbl:results:decision-tree}
 \begin{tabular}{@{}lll@{}}
 \toprule
 Method Name & Upsampled Score & Downsampled Score \\ \midrule

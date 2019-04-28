@@ -1,14 +1,96 @@
 \subsubsection{Scaling Data}
-The purpose of this section is to scale all of the data to the same scale. Previously utilized scaling method of natural logarithm log(e) didn't apply to all data points.
+The purpose of this section is to scale all of the data to the same range. 
 
+First method utilized was using natural logarithm $log(e)$, which was conducted in steps described in detail as follows.
+\paragraph{$log(e)$ - Determining which columns to scale}
+First the dataset was copied in order to avoid polluting the original dataset. Then in order to ensure that all values are on approximately the same scale a list of columns where column variance was above third quartile of the overall variance values was compiled. This can be read from code snippet \ref{code:scalers:loge-scaler-getting-cols}, with the names of columns gathered are presented in Table \ref{tbl:available-data-non-repeating-types}.
+
+\begin{code}
+\captionof{listing}{Log(e) gathering columns for analysis}
+\label{code:scalers:loge-scaler-getting-cols}
+\begin{minted}[breaklines]{python}
+variance_frame = pd.DataFrame(df.var())
+variance_quartile_3 = collect_outlier_data_to_list(variance_frame)[0]['q3']
+high_variance_cols=get_high_variance_cols(df, var_q3)
+\end{minted}
+\end{code}
+
+\begin{table}[!h]
+\centering
+\caption{Columns with variance greater than Q3 of overall variance in the dataset}
+\label{tab:loge-scaler-cols-aboveq3}
+\begin{tabular}{@{}l@{}}
+\toprule
+Column name \\ \midrule
+comment\_lines \\
+comment\_lines\_density \\
+complexity \\
+it\_uncovered\_lines \\
+lines\_to\_cover \\
+ncloc \\
+overall\_coverage \\
+file\_age\_in\_sec \\ \bottomrule
+\end{tabular}
+\end{table}
+
+
+\paragraph{$log(e)$ - Executing the scaler}
+Subsequently \texttt{convert\_col\_vals\_to\_log} function was used to convert values in all columns collected to their natural logarithm representation, with code snippet \ref{code:scalers:loge-scaler-exec} depicting preparation for execution while \ref{code:scalers:loge-impl} describes the actual process of adding $_log$ suffixed columns to the copied dataset depicting the $log(e)$ value of a given original. 
+
+\begin{code}
+\captionof{listing}{Log(e) scaler implementation}
+\label{code:scalers:loge-impl}
+\begin{minted}[breaklines]{python}
+def convert_col_vals_to_log(df, cols):
+    for column in cols:
+        df[column + '_log'] = np.log(df[column])
+\end{minted}
+\end{code}
+
+\begin{code}
+\captionof{listing}{Log(e) scaler execution}
+\label{code:scalers:loge-scaler-exec}
+\begin{minted}[breaklines]{python}
+df_log = df.copy(deep=True)
+convert_col_vals_to_log(df_log, high_variance_cols)
+df_log.drop(high_variance_cols, axis=1, inplace=True)
+df_log.var()
+\end{minted}
+\end{code}
+
+\paragraph{$log(e)$ - Conclusion}
+Table \ref{tbl:loge-scaler-cols-transformed} depicts the results of the transformation. While most of the obtained variance values are of a much smaller scale and slightly more in line with the remaining values, given that 75\% of values are below value of approximately 240, the transformed columns are now undervalued. 
+Additionally the \texttt{nan} values indicate that a number could not be obtained as a result of the transformation, likely due to the small original variance value. 
+
+\textbf{In conclusion} given that not all values are of the same scale at the end of this process, and given the presence of non-numerical values, \texttt{nan}, it has been decided against the usage of natural logarithm scaling method.
+\begin{table}[!h]
+\centering
+\caption{Scaled variance results}
+\label{tbl:loge-scaler-cols-transformed}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Column Name & Transformed Variance Value \\ \midrule
+comment\_lines\_log & nan \\
+comment\_lines\_density\_log & nan \\
+complexity\_log & nan \\
+it\_uncovered\_lines\_log & 0.23 \\
+lines\_to\_cover\_log & 1.23 \\
+ncloc\_log & 1.08 \\
+overall\_coverage\_log & nan \\
+file\_age\_in\_sec\_log & 5.49 \\ \bottomrule
+\end{tabular}
+\end{table}
+
+
+\paragraph{Scaling using Sci-Kit Learn's built-in methods}
 The following scaling methods will be applied sequentially to all data points subsequently used in the analysis:
 \begin{itemize}
-    \item Min Max
-    \item Max Abs
-    \item Standard
-    \item Power Transformer using Yeo-Johnson method - even though Box-Cox method should suffice as all data points are positive numbers
-    \item Quantile Normal - Gaussian
-    \item Quantile Uniform
+    \item Min Max, described in section \ref{sec:data-modelling:scalers:min-max}
+    \item Max Abs - corresponds to Decimal Scaling method, section \ref{sec:data-modelling:scalers:max-abs}
+    \item Standard, corresponds to Z-Score method, section \ref{sec:data-modelling:scalers:standard}
+    \item Power Transformer using Yeo-Johnson method, section\ref{sec:data-modelling:scalers:power-yeo-johnson}
+    \item Quantile Normal, section \ref{sec:data-modelling:scalers:quantile}
+    \item Quantile Uniform, section \ref{sec:data-modelling:scalers:quantile}
 \end{itemize}
 
 Data frames containing scaled data will be compiled into a reference map for easy lookup of data.
@@ -81,7 +163,7 @@ x_upscaled = scaler.fit_transform(X_up)
 scaled_data_ref_map_downscaled[min_max_key]=pd.DataFrame(x_scaled, columns=X.columns)
 scaled_data_ref_map_upscaled[min_max_key]=pd.DataFrame(x_upscaled, columns=X_up.columns)
 
-# Max Abs scaler
+# maximal absolute scaler
 
 # resetting X to default state
 X = df_downsampled.drop(['author', 'prev_author', 'issue_key', 'file_path', 'source_repo', 'is_bug'], axis=1)
