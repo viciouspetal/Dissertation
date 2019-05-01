@@ -1,9 +1,9 @@
 \subsubsection{Scaling Data}
 The purpose of this section is to scale all of the data to the same range. 
 
-First method utilized was using natural logarithm $log(e)$, which was conducted in steps described in detail as follows.
+The first method utilized was using natural logarithm $log(e)$, which was conducted in steps described in detail as follows.
 \paragraph{$log(e)$ - Determining which columns to scale}
-First the dataset was copied in order to avoid polluting the original dataset. Then in order to ensure that all values are on approximately the same scale a list of columns where column variance was above third quartile of the overall variance values was compiled. This can be read from code snippet \ref{code:scalers:loge-scaler-getting-cols}, with the names of columns gathered are presented in Table \ref{tbl:available-data-non-repeating-types}.
+First, the dataset was copied in order to avoid polluting the original dataset. Then in order to ensure that all values are on approximately the same scale a list of columns where column variance was above the third quartile of the overall variance values was compiled. This can be read from code snippet \ref{code:scalers:loge-scaler-getting-cols}, with the names of columns gathered are presented in Table \ref{tbl:available-data-non-repeating-types}.
 
 \begin{code}
 \captionof{listing}{Log(e) gathering columns for analysis}
@@ -59,8 +59,8 @@ df_log.var()
 \end{code}
 
 \paragraph{$log(e)$ - Conclusion}
-Table \ref{tbl:loge-scaler-cols-transformed} depicts the results of the transformation. While most of the obtained variance values are of a much smaller scale and slightly more in line with the remaining values, given that 75\% of values are below value of approximately 240, the transformed columns are now undervalued. 
-Additionally the \texttt{nan} values indicate that a number could not be obtained as a result of the transformation, likely due to the small original variance value. 
+Table \ref{tbl:loge-scaler-cols-transformed} depicts the results of the transformation. While most of the obtained variance values are of a much smaller scale and slightly more in line with the remaining values, given that 75\% of values are below the value of approximately 240, the transformed columns are now undervalued. 
+Additionally, the \texttt{nan} values indicate that a number could not be obtained as a result of the transformation, likely due to the small original variance value. 
 
 \textbf{In conclusion} given that not all values are of the same scale at the end of this process, and given the presence of non-numerical values, \texttt{nan}, it has been decided against the usage of natural logarithm scaling method.
 \begin{table}[!h]
@@ -95,7 +95,7 @@ The following scaling methods will be applied sequentially to all data points su
 
 Data frames containing scaled data will be compiled into a reference map for easy lookup of data.
 
-Following scaled data collection, standard deviation for each column for each of the methods will be compared to check the data distribution. Decided on a numerical method as compiling graphs for all of 6 scaling methods times 41 features would be inefficient. Graphs may be compiled for illustrating the some of the distribution improvements.
+Following scaled data collection, the standard deviation for each column for each of the methods will be compared to check the data distribution. Decided on a numerical method as compiling graphs for all of 6 scaling methods times 41 features would be inefficient. Graphs may be compiled for illustrating some of the distribution improvements.
 
 Finally, each scaled dataset will be used in Logistic Regression and Decision Tree Algorithm for analysis.
 \paragraph{Initial Setup}
@@ -130,7 +130,7 @@ Text columns dropped are pertaining to:
     \item source repository
 \end{itemize}
 
-All of the above have been retained in the dataset only for verification purposes to make sure that any transformed data point can be tracked back to its original state.
+All of the above have been retained in the dataset only for verification purposes to make sure that any transformed data point can be traced back to its original state.
 
 \begin{code}
 \captionof{listing}{Initial setup - getting datasets and removal of text columns}
@@ -197,8 +197,8 @@ scaled_data_ref_map_upscaled[yeo_johnson_key]=pd.DataFrame(PowerTransformer(meth
 X = df_downsampled.drop(['author', 'prev_author', 'issue_key', 'file_path', 'source_repo', 'is_bug'], axis=1)
 X_up = df_upsampled.drop(['author', 'prev_author', 'issue_key', 'file_path', 'source_repo', 'is_bug'], axis=1)
 
-scaled_data_ref_map_downscaled[quantile_normal_key]=pd.DataFrame(QuantileTransformer(output_distribution='normal').fit_transform(X), columns=X.columns)
-scaled_data_ref_map_upscaled[quantile_normal_key]=pd.DataFrame(QuantileTransformer(output_distribution='normal').fit_transform(X_up), columns=X_up.columns)
+scaled_data_ref_map_downscaled[quantile_normal_key] = pd.DataFrame(QuantileTransformer(output_distribution='normal').fit_transform(X), columns=X.columns)
+scaled_data_ref_map_upscaled[quantile_normal_key] = pd.DataFrame(QuantileTransformer(output_distribution='normal').fit_transform(X_up), columns=X_up.columns)
 
 # Quantile Transformation - Uniform
 
@@ -206,16 +206,16 @@ scaled_data_ref_map_upscaled[quantile_normal_key]=pd.DataFrame(QuantileTransform
 X = df_downsampled.drop(['author', 'prev_author', 'issue_key', 'file_path', 'source_repo', 'is_bug'], axis=1)
 X_up = df_upsampled.drop(['author', 'prev_author', 'issue_key', 'file_path', 'source_repo', 'is_bug'], axis=1)
 
-scaled_data_ref_map_downscaled[quantile_uniform_key]=pd.DataFrame(QuantileTransformer(output_distribution='uniform').fit_transform(X), columns=X.columns)
-scaled_data_ref_map_upscaled[quantile_uniform_key]=pd.DataFrame(QuantileTransformer(output_distribution='uniform').fit_transform(X_up), columns=X_up.columns)
+scaled_data_ref_map_downscaled[quantile_uniform_key] = pd.DataFrame(QuantileTransformer(output_distribution='uniform').fit_transform(X), columns=X.columns)
+scaled_data_ref_map_upscaled[quantile_uniform_key] = pd.DataFrame(QuantileTransformer(output_distribution='uniform').fit_transform(X_up), columns=X_up.columns)
 \end{minted}
 \end{code}
 \end{landscape}
 
 \paragraph{Comparing variance per column for each method}
-Verifying that column variance for each of the scaler methods have been reduced on per column basis as well as mean and median standard deviation for each of the methods investigated. Overall it is reasonable to surmise that the variance have improved by a factor of approximately 200 (!!) per method implemented.
+Verifying that column variance for each of the scaler methods has been reduced on per column basis as well as the mean and median standard deviation for each of the methods investigated. Overall it is reasonable to surmise that the variance has improved by a factor of approximately 200 per method implemented.
 
-For some of the features the variance decrease can be even more dramatic, for example it uncovered lines feature originally had variance of a little over 1400, however, after scaling methods were applied it was reduced to single digit value.
+For some of the features the variance decrease can be even more dramatic, for example, it uncovered lines feature originally had a variance of a little over 1400, however, after scaling methods were applied it was reduced to single digit value.
 
 \begin{code}
 \captionof{listing}{Initial setup - getting datasets and removal of text columns}
@@ -248,6 +248,39 @@ for method in scaled_data_ref_map_upscaled.keys():
         \end{minted}
 \end{code}
 
-Data series containing variance metrics for un-scaled, or unmodified data, has been removed as it was making it impossible to observe variance changes in scaled data due to its magnitude. Additionally when visualizing variance for unmodified data \fileAgeInSec{} feature has been removed as its extreme value was overshadowing all other variance metrics making them appear the same in magnitude.
+Data series containing variance metrics for un-scaled, or unmodified data, has been removed as it was making it impossible to observe variance changes in scaled data due to its magnitude. Additionally, when visualizing variance, as per implementation listed in code snippet \ref{code:charting-variance-post-resample}, for unmodified data \fileAgeInSec{} feature has been removed as its extreme value was overshadowing all other variance metrics making them appear the same in magnitude. 
 
-Variance data for all scaling methods has been compiled into a single dataset for easy manipulation and visualization. Below it can be observed from the table that any scaling method decreased data variance metric significantly.
+Variance data for all scaling methods have been compiled into a single dataset for easy manipulation and visualization. Below it can be observed from the table that any scaling method decreased data variance metric significantly.
+
+\begin{code}
+\captionof{listing}{Graphing variance Bar plots}
+\label{code:charting-variance-post-resample}
+\begin{minted}[breaklines]{python}
+def graph_variance_bar_plot(data, key, isUpsampled, graph_size='ml', rows_to_drop=['file_age_in_sec'], fig_i=0):
+
+    set_graph_size(graph_size)
+    tmp_df = pd.DataFrame(data[key]).drop(rows_to_drop, axis='rows')
+    unstacked = tmp_df.T.unstack().to_frame()
+    plt.figure(fig_i)
+    ax = sb.barplot(
+        x=unstacked.index.get_level_values(0),
+        y=unstacked[0]);
+
+    ax.set(title='High Variance Columns Plot', xlabel='Column Name', ylabel='Variance Value')
+
+    # make x-axis labels vertical
+    for item in ax.get_xticklabels():
+        item.set_rotation(90)
+    
+    # checking which label is appropriate for the graph name depending on the dataset provided, 
+    # e.g. upsample vs downsample    
+    resample_direction=''
+    if isUpsampled:
+        resample_direction = ' upsampled '
+    else:
+        resample_direction = ' downsampled '
+    path = default_figure_out_path+'/variance'
+    save_graph('Comparison of variance per column for ' + key + resample_direction+'dataset', path)
+    fig_i=fig_i+1
+\end{minted}
+\end{code}

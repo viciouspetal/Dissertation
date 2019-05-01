@@ -81,7 +81,7 @@ it uncovered lines &  \\ \bottomrule
 
 
 \subsection{Data Gathering Components}
-The dataset for the analysis had to be generated from live business data as such data has not been made available in the public domain. Section \ref{sec:data-available} can be used a reference as to what metrics, along with their type and brief description, have been gathered. In order to construct the dataset subsequently used in the analysis, 3 real live business tools were used:
+The dataset for the analysis had to be generated from live business data as such data has not been made available in the public domain. Section \ref{sec:data-available} can be used as a reference as to what metrics, along with their type and a brief description, have been gathered. In order to construct the dataset subsequently used in the analysis, 3 real live business tools were used:
 
 \begin{enumerate}{\label{lst:tools_used}}
     \item Sonar server by SonarSource - provided code quality metrics
@@ -89,7 +89,7 @@ The dataset for the analysis had to be generated from live business data as such
     \item Bitbucket by Atlassian  - provided information about commit timestamp, the author as well as details about previous commit author and previous commit timestamp allowing for calculating file staleness 
 \end{enumerate}
     
-Additionally, a tool to gather metrics, referred to as Data Gatherer, has been developed in order to produce the end dataset and will be made available upon submission. The purpose of the Data Gatherer tool is to coordinate the execution of other tools from the above list as well as collate the acquired data into the end dataset then used in further analysis as per Figure \ref{fig:data_gathering}.
+Additionally, a tool to gather metrics, referred to as Data Gatherer, has been developed in order to produce the end dataset and will be made available upon submission. The purpose of the Data Gatherer tool is to coordinate the execution of other tools from the above list as well as collate the acquired data into the end dataset then used in the further analysis as per Figure \ref{fig:data_gathering}.
 
 \begin{figure}[h!]
 \centering
@@ -98,19 +98,19 @@ Additionally, a tool to gather metrics, referred to as Data Gatherer, has been d
     \label{fig:data_gathering}
 \end{figure}
 
-First tool to be used in the data gathering process is Atlassian's JIRA server. JIRA is a ticketing system used by software developers to keep track of issues, feature requests and most importantly in the current context, bugs. Each ticket has been assigned a category upon its creation depicting its purpose. In the context of the current use case the most relevant types encountered are:
+The first tool to be used in the data gathering process is Atlassian's JIRA server. JIRA is a ticketing system used by software developers to keep track of issues, feature requests and most importantly in the current context, bugs. Each ticket has been assigned a category upon its creation depicting its purpose. In the context of the current use case the most relevant types encountered are:
 
 \begin{itemize}
-    \item Story - represents a feature task to be done. Upon completion it is a fully functional, testable vertical slice of functionality delivering value to end-users
-    \item Task - represents an additional development task, such as, but not limited to, setting up test environments, automation of effort, including testing effort, infrastructure maintenance etc. Does not provide direct value to end users
-    \item Bug - represents issues found in released software, especially when expected and actual behaviour of a given piece of functionality doesn't match.
+    \item Story - represents a feature task to be done. Upon completion, it is a fully functional, testable vertical slice of functionality delivering value to end-users
+    \item Task - represents an additional development task, such as, but not limited to, setting up test environments, automation of effort, including testing effort, infrastructure maintenance, etc. Does not provide direct value to end users
+    \item Bug - represents issues found in released software, especially when expected and the actual behaviour of a given piece of functionality doesn't match.
 \end{itemize}
 Given that Task type tickets are not directly linked to the development life cycle they have been excluded from further analysis and the focus has been placed on Story and Bug type tickets instead.
 
-The second use of JIRA server was its proprietary integration with the source code repository - Bitbucket, as both tools are offered by the same company, Atlassian. For each of the JIRA tickets there existed a link between a given ticket and source code file changes, or commits, made and persisted in Bitbucket system. 
-Each commit could consist of many files and each source code file could have been committed to multiple times under the umbrella of a single ticket. However, not all commit records under a ticket have been taken into the account - every so called merge commit have been excluded.
+The second use of the JIRA server was its proprietary integration with the source code repository - Bitbucket, as both tools are offered by the same company, Atlassian. For each of the JIRA tickets there existed a link between a given ticket and source code file changes, or commits, made and persisted in Bitbucket system. 
+Each commit could consist of many files and each source code file could have been committed to multiple times under the umbrella of a single ticket. However, not all commit records under a ticket have been taken into the account - every so-called merge commit have been excluded.
 
-To illustrate what a merge commit is and why it must be excluded \ref{fig:git-branching-merging-and-rebasing} will be used, where blue nodes signify the master, or the golden copy of the code, and green and purple identify branches, where feature, bug fix or any other development work is carried out as part of a development lifecycle. At the end of its life a branch will be integrated into the Master branch, which will generate a merge commit - illustrated by Feature branch. Additionally, it is a normal occurrence to have more than 1 branch created in a given codebase at any given time. If another branch has been created from the master before the Feature code was merged, as per \ref{fig:git-branching-merging-and-rebasing} Bug, and it is actively being developed on past the merge point such branch will have to be rebased. The rebase process will pull in the merge commit created by Feature, however, all source code files listed under merge commit will have already been analyzed under JIRA ticket representing the Feature, therefore should it not be excluded from further analysis it would have duplicated the effort. Not excluding merge commits also represented significant risk with regards to story vs. bug categorization of source code files committed as Bug might as well have been a bug. In such scenario file committed under the Feature ticked would be categorized as non-bug, as per ticket category, as well as bug as per category assigned by the second ticket.
+To illustrate what a merge commit is and why it must be excluded \ref{fig:git-branching-merging-and-rebasing} will be used, where blue nodes signify the master or the golden copy of the code, and green and purple identify branches, where feature, bug fix or any other development work is carried out as part of a development lifecycle. At the end of its life, a branch will be integrated into the Master branch, which will generate a merge commit - illustrated by Feature branch. Additionally, it is a normal occurrence to have more than 1 branch created in a given codebase at any given time. If another branch has been created from the master before the Feature code was merged, as per \ref{fig:git-branching-merging-and-rebasing} Bug, and it is actively being developed on past the merge point such branch will have to be rebased. The rebase process will pull in the merge commit created by Feature, however, all source code files listed under merge commit will have already been analyzed under JIRA ticket representing the Feature, therefore should it not be excluded from the further analysis it would have duplicated the effort. Not excluding merge commits also represented significant risk with regards to story vs. bug categorization of source code files committed as Bug might as well have been a bug. In such scenario file committed under the Feature ticked would be categorized as non-bug, as per ticket category, as well as a bug as per category assigned by the second ticket.
 
 \begin{figure}[!h]
     \centering
@@ -137,13 +137,13 @@ while the Bitbucket server provided additional information about:
 
 The final tool utilized was SonarQube by SonarSource, an open-source platform. Its capabilities include continuous inspection of code quality to perform automatic reviews with static analysis of code to detect code smells, reports on duplicated code, coding standards, unit tests, code coverage, code complexity, comments,  security vulnerabilities, and much more. In the context of this use case it was utilized to associate code metrics listed in Tables \ref{tbl:available-data-above-0-max-100} and \ref{tbl:available-data-above-0-no-max} as well as \files{}, \sqaleDebt{}, \statements{} and \violations{} provided in Table \ref{tbl:available-data-non-repeating-types}.
 
-The \issueKey{}, \sourceRepository{} and \filePath{} were only used to verify that a given data point can be traced to a relevant JIRA ticket in order to verify it belongs to a assigned category, \authorAttrib{} and \prevAuthorAttrib{} were used to populate seniority and project tenure features. Finally, \timestamp{} and \prevTimestamp{} were used to calculate staleness of the file between changes.
+The \issueKey{}, \sourceRepository{} and \filePath{} were only used to verify that a given data point can be traced to a relevant JIRA ticket in order to verify it belongs to an assigned category, \authorAttrib{} and \prevAuthorAttrib{} were used to populate seniority and project tenure features. Finally, \timestamp{} and \prevTimestamp{} were used to calculate staleness of the file between changes.
 
 \subsection{Machine Learning Models Utilized}
 
 \subsubsection{Logistic Regression}
-Logistic regression is a type of a predictive analysis. Logistic regression has been selected as it is considered an appropriate classification method when the target variable is binary\cite{Hastie2009OnLogisticRegForBinaryTargetClass}. 
-As part of the analysis two regularization method were utilized to both reduce the number of features and to programmatically detect features contributing the most to ward the correct classification of the target variable. 
+Logistic regression is a type of predictive analysis. It has been selected as it is considered an appropriate classification method when the target variable is binary\cite{Hastie2009OnLogisticRegForBinaryTargetClass}\cite{ridgeEstInLogReg}. 
+As part of the analysis, two regularization methods were utilized to both reduce the number of features and to programmatically detect features contributing the most toward the correct classification of the target variable. 
 
 \subsubsection{Linear Model Regularization} 
 Regularization is defined as introducing an additional term to the loss function, the prediction model, in order to prevent overfitting of same. During the analysis Lasso and Ridge techniques, referred to as L1 and L2 regularization respectively, were used due to the number of features under analysis as both focus on coefficient shrinking, however, Table \ref{tab:regularization_l1_vs_l2} outlines key differences between the two methods, starting with the metrics measured by each.
@@ -152,13 +152,12 @@ Regularization is defined as introducing an additional term to the loss function
 \centering
 \begin{tabular}{@{}ll@{}}
 \toprule
-L1                                                 & L2                                                           \\ \midrule
-Sum of weight                                      & Sum of square of weights                                     \\
-Sparse outputs                                     & Non-sparse output                                            \\
-Built-in feature selection                         & No feature selection                                         \\
-High sparsity for highly correlated features       & Even coefficient distribution 
-for highly correlated features \\
-Can  interpret models with large feature sets & Main use case is preventing overfitting                      \\ \bottomrule
+L1 & L2 \\ \midrule
+Sum of weight & Sum of square of weights \\
+Sparse outputs & Non-sparse output \\
+Built-in feature selection & No feature selection \\
+High sparsity for highly correlated features & \begin{tabular}[c]{@{}l@{}}Even coefficient distribution \\ for highly correlated features\end{tabular} \\
+Can  interpret models with large feature sets & Main use case is preventing overfitting \\ \bottomrule
 \end{tabular}
 \caption{Summary of L1 vs L2 Regularization Techniques}
 \label{tab:regularization_l1_vs_l2}
@@ -185,11 +184,11 @@ From the same definition it can be deducted that impact of \textalpha{} will be 
 \end{enumerate}
 
 \subsubsection{Decision Tree Classifier}
-Decision Tree for classification is a non-parametric method of supervised machine learning. Along with Decision Tree Regression it was first proposed in 1984\cite{BreimanCart1984} and it was intended as a top down approach applied to a given set of data points. To find solutions a decision tree will make a number of sequential, hierarchical, or top down, decisions about the outcome variable based on the predictor data. 
+Decision Tree for classification is a non-parametric method of supervised machine learning. Along with Decision Tree Regression, it was first proposed in 1984\cite{BreimanCart1984} and it was intended as a top-down approach applied to a given set of data points. To find solutions a decision tree will make a number of sequential, hierarchical, or top-down, decisions about the outcome variable based on the predictor data. 
 
-A very simplistic decision tree for classification has been represented in Figure \ref{fig:decision-tree-sample}, where white nodes are the decision boundary nodes, or branches, and green ones represent terminal nodes, or leaf nodes. One of the big advantages of this method is its human readability - even the more complex trees can still be interpreted and traversed by humans with relative ease \todo{will need a reference for this}. 
+A very simplistic decision tree for classification has been represented in Figure \ref{fig:decision-tree-sample}, where white nodes are the decision boundary nodes or branches, and green ones represent terminal nodes or leaf nodes. One of the big advantages of this method is its human readability - even the more complex trees can still be interpreted and traversed by humans with relative ease \todo{will need a reference for this}. 
 
-It is a model based purely on data from previous observations of a given target variable and no assumptions are made with regards too the distribution of errors or that of the data and it is considered a highly versatile model\cite{ensembleMethodsInMachineLearningDietterich} well able to explore the solution space without getting stuck in the local search optimum solution\cite{ensembleMethodsInMachineLearningDietterich}. However, at the same time, model's reliance on previous observations, indicates that the algorithm will terminate as soon as optimal solution fitting the training data is found.
+It is a model based purely on data from previous observations of a given target variable and no assumptions are made with regards to the distribution of errors or that of the data and it is considered a highly versatile model\cite{ensembleMethodsInMachineLearningDietterich} well able to explore the solution space without getting stuck in the local search optimum solution\cite{ensembleMethodsInMachineLearningDietterich}. However, at the same time, the model's reliance on previous observations indicates that the algorithm will terminate as soon as the optimal solution fitting the training data is found.
 
 \begin{figure}[!h]
     \centering
@@ -235,13 +234,13 @@ Finally, an evaluation of the effectiveness of selected machine learning models 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Data Normalization methods}\label{sec:data-modelling:scalers}
 \paragraph{Min Max method}\label{sec:data-modelling:scalers:min-max}
-Min max data normalization is a method of scaling data by assigning it a value in a range of between 0 and 1. Alternatively the value range of -1 to 1 can also be used \cite{dataNormalization2014}. The method normalizes the values of the attributes of a data set according to the minimum and maximum values of a given attribute. The formula can be expressed as:
+Min-max data normalization is a method of scaling data by assigning it a value in a range of between 0 and 1. Alternatively, the value range of -1 to 1 can also be used \cite{dataNormalization2014}. The method normalizes the values of the attributes of a data set according to the minimum and maximum values of a given attribute. The formula can be expressed as:
 \begin{equation}\label{eq:min-max}
     \hat{a} = low+ \frac{(high - low)*(a - minA)}{maxA - minA)} 
 \end{equation}
 where $\hat{a}$ represents the transformed value of an attribute A.
 
-It has been pointed out that this method suffers from uncertainty when normalizing time series data\cite{dataNormalization2014}, however, given that in this context it is not use to normalize time series value it has been included in the analysis.
+It has been pointed out that this method suffers from uncertainty when normalizing time series data\cite{dataNormalization2014}, however, given that in this context it is not used to normalize time series value it has been included in the analysis.
 \paragraph{Decimal Scaling}\label{sec:data-modelling:scalers:max-abs}
 The decimal scaling normalization method works by scaling each feature by its maximum absolute value and can be represented by:
 \begin{equation}
@@ -249,7 +248,7 @@ The decimal scaling normalization method works by scaling each feature by its ma
 \end{equation}
 where $\hat{a}$ represents the transformed value, $a$, the original value and $d$ is the smallest integer where $max(|\hat{a}|<1)$.
 
-Similarly to min max normalization, as this method also relies on knowing the maximum value of an attribute ahead of time, it has been unsuitable to time series data\cite{dataNormalization2014}. However, again, the attributes scaled do not include time series data it has been deemed appropriate to include it in the course of the analysis.
+Similarly to min-max normalization, as this method also relies on knowing the maximum value of an attribute ahead of time, it has been unsuitable to time series data\cite{dataNormalization2014}. However, again, the attributes scaled do not include time series data it has been deemed appropriate to include it in the course of the analysis.
 
 \paragraph{Z-Score Normalization}\label{sec:data-modelling:scalers:standard}
 This method standardizes the features by removing the mean and scaling the attribute to unit variance. It can be represented y:
@@ -258,10 +257,10 @@ This method standardizes the features by removing the mean and scaling the attri
 \end{equation}
 where $\hat{a}$ represents the transformed value, $\mu(a)$ is the arithmetic mean of a given attribute and $\sigma(a)$ is its standard deviation.
 
-As this method does not rely on knowing the minimum and maximum values ahead of applying the transformation it overcomes the deficiencies of the Min Max and Decimal Scaling methods\cite{dataNormalization2014}. However, at the same time it faces difficulties with a non-stationary data series where the mean or standard deviation change over time.
+As this method does not rely on knowing the minimum and maximum values ahead of applying the transformation it overcomes the deficiencies of the Min-Max and Decimal Scaling methods\cite{dataNormalization2014}. However, at the same time, it faces difficulties with a non-stationary data series where the mean or standard deviation change over time.
 
 \paragraph{Power Transformation - Yeo-Johnson method} \label{sec:data-modelling:scalers:power-yeo-johnson}
-Power data normalization methods are a family of parametric, monotonic transformations aiming to alter given data from any distribution to as close to a Gaussian distribution as possible. As with any data normalization method it is performed on data in order to reduce variance and minimize skewness.
+Power data normalization methods are a family of parametric, monotonic transformations aiming to alter given data from any distribution to as close to a Gaussian distribution as possible. As with any data normalization method, it is performed on data in order to reduce variance and minimize skewness.
 
 The Box-Cox method,depicted in equation \ref{eq:box-cox} has been first proposed in 1964\cite{boxCox1964} and has been a very popular method of dealing with distribution variance \cite{YANG200614}. However, it is only applicable to strictly positive data\cite{YANG200614}. 
 Additionally, as pointed out by Yeo and Johnson \cite{yeo-johnson-original} despite the fact that Box-Cox method could be modified to approximate normal distribution for negative $\lambda$, however, in those instances the proposed modifications fail when applied to heavily skewed distributions.
@@ -271,7 +270,7 @@ Additionally, as pointed out by Yeo and Johnson \cite{yeo-johnson-original} desp
 \end{cases}
 \end{equation}
 
-Provided the data is indeed heavily skewed, but despite the fact that all of the values present in the dataset are positive, as per the domain, the Box-Cox method has been ruled out as an appropriate data normalization method. Instead Yeo-Johnson transformation, as per equation\ref{eq:yeo-johnson}, has been applied.
+Provided the data is indeed heavily skewed, but despite the fact that all of the values present in the dataset are positive, as per the domain, the Box-Cox method has been ruled out as an appropriate data normalization method. Instead, Yeo-Johnson transformation, as per equation\ref{eq:yeo-johnson}, has been applied.
 
 \begin{equation}\label{eq:yeo-johnson}
     \hat{a}^{(\lambda)}=\begin{cases} {\{{a +1}^{\lambda } - 1 }\}/ {\lambda}& \text{if $a \geq 0$ and $\lambda \neq 0$},\\

@@ -1,10 +1,3 @@
-import re
-import sys
-
-import requests
-from requests.auth import HTTPBasicAuth
-
-
 class JiraConnector:
     server_url_base = 'https://cksvnprd01.corp.emc.com/jira'
     url = 'https://cksvnprd01.corp.emc.com/jira/rest/webResources/1.0/resources'
@@ -23,7 +16,7 @@ class JiraConnector:
         return self.get_filenames_from_commits(resp)
 
     def is_valid_project(self, project_name):
-        exclusions_pattern = '.*-ng-api$|.*-ui-components$|.*kaa.*|^titan-client$|^titan-gradle-plugin$|^workflow-libs$|^archive.*|^jenkins-config-tasks$|^configuration-user-journeys$|randummy|workflow-libs3|.*gulp_tasks.*'
+        exclusions_pattern = '' # omitted for brevity
         exclusions_re = re.compile(exclusions_pattern)
 
         if exclusions_re.match(project_name):
@@ -94,14 +87,10 @@ class JiraConnector:
         repo_to_commits_dict = self.get_commits_from_json_response(json)
         filenames = {}
         commit_details = {}
-        java_exclusions = '.*Test.*.java|.*Interface.*\.java|.*NameToIndex\.java$|.*\.jar$|.*\.war$|.*.gradle$|.*Config.java'
-        kotlin_exclusions = '.*Test.*.kt|.*Interface.*\.kt|.*Config.kt|.*Dto.*kt$|.*Enum.*kt$'
-        javascript_exclusions = '.*\.?factory.js$|.*\.html$|.*\.e2e-spec.js$|.*\.stub.js$|.*\.po.js$|.*spec.js$|.*\.scss$' \
-                                '|.*\.css$|.*\.svg$|.*\.ico$|.*\.npmrc$|.*\.conf.js$|.*gulpfile.js$|.*factories.js$|.*.config.js$' \
-                                '|.*ColumnDefs.js$|.*ColumnDef.js$|.*Spec.js$|.*Decorator.js|\.eslintrc'
-        other_exclusions = '\.gitignore$|.*\.md$|.*\.properties$|.*\.gitattributes$|.*\.sql|.*\.csv|.*\.xlsx$|.*\.json$' \
-                           '|.*\.lock$|.*\.gz$|.*\.txt$|.*\.xlsm$|.*\.yaml$|.*\.yml$|.*Jenkinsfile.*|.*\.xml$|.*CreateService.*' \
-                           '|.*ReadService.*|.*WriteService.*|.*DeleteService.*'
+        java_exclusions = '' # omitted for clarity
+        kotlin_exclusions = '' # omitted for clarity
+        javascript_exclusions = '' # omitted for clarity
+        other_exclusions = '' # omitted for clarity
         java_re = re.compile(java_exclusions)
         kotlin_re = re.compile(kotlin_exclusions)
         javascript_re = re.compile(javascript_exclusions)
@@ -125,11 +114,3 @@ class JiraConnector:
 
     def get_repo_name(self, json):
         return self.get_repositories_from_json_response(json)[0]['name']
-
-
-if __name__ == '__main__':
-    password = None
-    if len(sys.argv) > 1:
-        password = sys.argv[1]
-    obj = JiraConnector()
-    obj.main('wojcij1', password)
