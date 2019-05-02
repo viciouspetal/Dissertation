@@ -28,11 +28,10 @@ The JIRA connector then interrogates the server by executing \mintinline{html}{/
 In the next step, a list of commits for a given JIRA ID is obtained for all code repositories from the \mintinline{html}{/dev-status/1.0/issue/detail?issueId={jira_id}&applicationType=stash} URL. The server response is in JSON format and as Figure \ref{fig:source-code:jira:commit-response} illustrates it is possible for any given commit to include multiple files, per repository. Additionally, many commits can be made under the same ticket, under many repositories. Based on Figure \ref{fig:source-code:jira:commit-response}, it should be assumed that the all of the next steps are executed for all files, under any commit in any repository provided by the above REST call.
 \begin{figure}[!h]
     \centering
+    \includegraphics[scale=0.7]{Figures/gatherer/jira_connector_getting_commit_files_response.PNG}
     \caption{Sample Response from JIRA detailing all commits made under given ticket}
     \label{fig:source-code:jira:commit-response}
-    \includegraphics[scale=0.7]{Figures/gatherer/jira_connector_getting_commit_files_response.PNG}
-    \caption{Caption}
-    \label{fig:my_label}
+    
 \end{figure}
     
 At this step, a number of infrastructure repositories that are maintenance-only, or ones that are written in languages not supported by Sonar server, thus making it impossible to obtain code quality metrics, have been removed. The repository names to be excluded are matched by a regular expression, from a list of static names compiled based on the domain knowledge of the infrastructure present at the business site. The repositories in question were mainly related to testing framework setup and maintenance, deployment pipelines for specific products and applications present at the business site or automated tests, etc. The list is not provided as it includes product names and it has been considered sensitive by the business owners.
@@ -40,45 +39,7 @@ At this step, a number of infrastructure repositories that are maintenance-only,
 In the next step, all merge commits are being removed from the analysis as it would otherwise create duplicate data points. For detailed explanation refer to Section \ref{sec:design}. 
 
 Subsequently, a number of files are removed from the analysis - for listing of what file patterns were ignored, refer to Table \ref{tbl:file-extensions-excluded-from-analysis}. The files were excluded by name and/or extension pattern using regular expression and they represented a number of different categories detailed below. 
-
-Firstly, "Test Files" column included the actual test classes housing the automated test scripts, their corresponding fixtures and object factories and any test configuration required by a given project.
-
-The "Build and Infrastructure" column describes any files required, utilized or produced as part of a given project's build and publishing lifecycle. It also included any files relating to the infrastructure as code, which is heavily utilized in the applications under analysis to codify setup of any given deployment.
-
-The third column, "Interfaces, Enums and Transfer Objects", details patterns for specific source code file for which code coverage doesn't exists as they're not strictly executable. This includes Java or Kotlin interface files, which as they do not have a specific file name associated with them, had to be compiled by trial and error and from own domain knowledge. Additionally, all of the enumerations in Java and Kotlin languages were excluded by utilizing the commonly applied "Enum" suffix. Furthermore, all data transfer object, which in the context of applications under analysis would only contain mutator methods, were excluded by utilizing the "Dto" suffix. 
-
-The "Project Configuration" column refers to any configuration files contained in the project, which can refer to both application object setup, in the form of for example Spring Framework's Beans, as well as build tool files and properties. 
-The "Other" column contains all of the files that did not fit any of the above categories. It represents the readme files, database scripts and other setup files.
-
-To reiterate, all of the file patterns included in Table \ref{tbl:file-extensions-excluded-from-analysis} represent files for which no source code metrics could presently, be obtained from Sonar server. Therefore, they were removed to prevent generating noise in the analysis.
-
-
-    
-In the next and final step a list of initial metrics identifying a given commit is compiled. Alongside it, a map containing \texttt{issue\_key}, \texttt{source\_repository}, \texttt{commitId}, \texttt{path} and \texttt{repo\_code}, which is a unique 3-4 character abbreviation identifying a repository, is composed. Complete map containing both commit details as well as information necessary in the subsequent step is returned back to the coordinator file. 
-    
-For code listing for this step refer to code excerpt \ref{code:jira-connector.py}
-
-\subsubsection{Bitbucket Connector}\label{sec:source-code:bitbucket}
-Given data provided by JIRA server from above item interrogates a specified Bitbucket server over REST API in order to obtain details of the previous commit such as author and timestamp. As previously described in Section \ref{sec:design}, List \ref{lst:design:info-from-bitbucket} those details will be used in subsequent analysis steps to provide an indication of developers' level of experience based on seniority as well as familiarity with a given product based on the amount of time spent on the project.
-    
-Once all those details have been obtained and compiled they are returned to the coordinator file.
-Complete code listing is available from code excerpt \ref{code:bitbucket.py}.
- 
-\subsubsection{Sonar Metrics Gatherer}\label{sec:source-code:sonar-metrics}
-Using data gathered by JIRA and Bitbucket steps above it contacts Sonar server for each and every file, for each and every commit under each JIRA ticket and retrieves a specified list of code quality metrics. The list is defined in \texttt{sonar\_metrics\_enum.py} and it is comprehensive. 
-    
-In order to retrieve code quality metrics first, the expected parameters need to be generated from data retrieved from both JIRA and Bitbucket - the expected data is called project component and it is a unique identifier on Sonar Server for each file ever analyzed. The project component is in a different format for some projects, therefore, it was necessary to model a number of generation use cases, as outlined in the \texttt{sonar\_component\_name\_generator} method in \ref{code:sonar-gatherer.py} code listing.
-    
-One thing of note is that for different source code languages different metrics, especially with regards to the code coverage metrics can be provided by Sonar. For example, for JavaScript-based languages such as Angular JS there is a separate position for integration, or IT, coverage, whereas for Java and other JVM based languages that metric is rarely provided. In JVM based languages it has been folded into the \texttt{overall code coverage} metric instead.
-
-
-\subsubsection{Author Detail Transformer}\label{sec:source-code:author-encoder}
-it is invoked after code quality metrics have been gathered by \texttt{SonarMetricsGatherer} class.
-
-\subsubsection{Other Utilities}
-
-
-\begin{table}[h!]
+\begin{table}[!h]
 \centering
 \caption{Files excluded from the analysis by extension or suffix}
 \label{tbl:file-extensions-excluded-from-analysis}
@@ -119,38 +80,81 @@ Test Files & \begin{tabular}[c]{@{}l@{}}Build and Deployment \\ infrastructure\e
  &  &  &  & .*\textbackslash{}.xml \\ \bottomrule
 \end{tabular}
 \end{table}
+Firstly, "Test Files" column included the actual test classes housing the automated test scripts, their corresponding fixtures and object factories and any test configuration required by a given project.
 
+The "Build and Infrastructure" column describes any files required, utilized or produced as part of a given project's build and publishing lifecycle. It also included any files relating to the infrastructure as code, which is heavily utilized in the applications under analysis to codify setup of any given deployment.
 
+The third column, "Interfaces, Enums and Transfer Objects", details patterns for specific source code file for which code coverage doesn't exists as they're not strictly executable. This includes Java or Kotlin interface files, which as they do not have a specific file name associated with them, had to be compiled by trial and error and from own domain knowledge. Additionally, all of the enumerations in Java and Kotlin languages were excluded by utilizing the commonly applied "Enum" suffix. Furthermore, all data transfer object, which in the context of applications under analysis would only contain mutator methods, were excluded by utilizing the "Dto" suffix. 
 
+The "Project Configuration" column refers to any configuration files contained in the project, which can refer to both application object setup, in the form of for example Spring Framework's Beans, as well as build tool files and properties. 
+The "Other" column contains all of the files that did not fit any of the above categories. It represents the readme files, database scripts and other setup files.
 
-\begin{landscape}
+To reiterate, all of the file patterns included in Table \ref{tbl:file-extensions-excluded-from-analysis} represent files for which no source code metrics could presently, be obtained from Sonar server. Therefore, they were removed to prevent generating noise in the analysis.
+    
+In the next and final step a list of initial metrics identifying a given commit is compiled. Alongside it, a map containing \texttt{issue\_key}, \texttt{source\_repository}, \texttt{commitId}, \texttt{path} and \texttt{repo\_code}, which is a unique 3-4 character abbreviation identifying a repository, however, different that that of JIRA key, is composed. The complete map containing both commit details as well as information necessary in the subsequent step is returned back to the coordinator file. 
+    
+For code listing for this step refer to code excerpt \ref{code:jira-connector.py}
 
-\begin{code}
-\captionof{listing}{Main data gathering component - the coordinator}
-\label{code:gatherer_main.py}
-\inputminted{python}{source_code/gatherer.py}
-\end{code}
+\subsubsection{Bitbucket Connector}\label{sec:source-code:bitbucket}
+The data provided by JIRA server as described in section \ref{sec:source-code:jira} is necessary to communicate with the Bitbucket server over REST API. The role of Bitbucket is to provide details of the previous commit made on a given file, such as its author and timestamp. 
 
-\begin{code}
-\captionof{listing}{JIRA Connector - extracts relevant metrics from a given JIRA ticket}
-\label{code:jira-connector.py}
-% \begin{minted}[breaklines]{python}
-\inputminted{python}{source_code/jira_connector.py}
-% \end{minted}
-\end{code}
+The interrogation as is the case with JIRA, happens over public REST API provided by Bitbucket server by making a call to 
+\begin{minted}[breaklines]{html}
+<server_name>/rest/api/1.0/projects/{repo_code}/repos/{repo_name}/commits/{commit_id}
+\end{minted} 
+URL.
+The response is given in JSON format and as per Figure \ref{fig:source-code:bitbucket-prev-commit-response} it contains only 4 relevant properties per given commit made on a given file.
 
-\begin{code}
- \captionof{listing}{Bitbucket connector - retrieves commit metrics for a given file}
- \label{code:bitbucket.py}
-\inputminted{python}{source_code/bitbucket_connector.py}
- \end{code}
+\begin{figure}[!h]
+    \centering
+    \includegraphics[scale=0.7]{Figures/gatherer/bitbucket_commit_details.PNG}
+    \caption{Caption}
+    \label{fig:source-code:bitbucket-prev-commit-response}
+\end{figure}
+
+As previously described in Section \ref{sec:design}, List \ref{lst:design:info-from-bitbucket} the details listed in Figure \ref{fig:source-code:bitbucket-prev-commit-response} will be used in subsequent analysis steps to provide an indication of developers' level of experience based on seniority as well as familiarity with a given product based on the amount of time spent on the project.
+    
+In the final step above details, are compiled into a map of arrays, with the a given file name as a key and author and timestamp details as properties inside the array object. The compiled data is then returned to the coordinator script for further processing.
+
+Complete code listing is available from code excerpt \ref{code:bitbucket.py}.
  
- \begin{code}
- \captionof{listing}{Sonar connector - retrieves code quality metrics for a given file}
- \label{code:sonar-gatherer.py}
- 
- \inputminted{python}{source_code/SonarMetricsGatherer.py}
- 
- \end{code}
+\subsubsection{Sonar Metrics Gatherer}\label{sec:source-code:sonar-metrics}
+Using data gathered from JIRA and Bitbucket in sections \ref{sec:source-code:jira} and \ref{sec:source-code:bitbucket} Sonar server is contacted for each and every file, for each and every commit under each JIRA ticket. 
 
-\end{landscape}
+In order to retrieve any metrics from Sonar server first a property called a key needs to be obtained. Initially it was attempted to dynamically generate the project key from data already at hand, however, Sonar server doesn't display any easily identifiable pattern in generating its project keys. Instead, a call to, a now deprecated but still functioning REST endpoint, has been made over the publicly available API. 
+The call is always made to \mintinline{html}{<server_name>/api/projects/index?search=<project_name>\%20<default_branch>}, and while the "server\_name" and "project\_name" properties are easily obtainable and static in nature, the "default\_branch" property can be different per project basis and depends solely on the setup of a given Bitbucket repository. Currently, in the gathered data only 2 default branches have been detected: "develop" and "master", however, there is a possibility that additional branch names could be present in different data. In general, "master" branch has been used in JavaScript projects and "develop" has been used as a default for Java and Kotlin based repositories. However, given that this is just an observation and it does not carry 100\% certainty, for each project key to be retrieved using above endpoint, both eventualities had to be checked. 
+
+Curiously, the response in this case was returned in XML format and not JSON, which meant that an additional method of parsing out the data had to be devised. 
+The easiest solution has been selected, where the XML response in question was automatically converted to a JSON representation. 
+
+When project-key has successfully been obtained it needs to be combined with the name of the repository a given file is in in order to obtain a Sonar component-key. The component-key is part of the request URL made to the Sonar server in order to finally obtain code quality metrics. Without it, there is no avenue to identify which metrics are for which file, in what repository.
+
+The difficulty again, is the lack of overarching consistency in how component-keys are generated when Sonar analysis is first setup as the format has been discovered to differ between JavaScript based project and those written in Java or Kotlin.
+
+To give an example, for JavaScript based projects the component-key format would be:
+\texttt{component:branch:module\_name} but for the JVM based languages, like Java, the format is
+\texttt{component:module\_name:branch}.
+Notice how \texttt{module\_name} and \texttt{branch} switch their positions between languages.
+This difference is significant as it allows for forming a hypothesis, that the component-key format may be different yet again for projects in languages that have not been taken into the account so far, for example C\# or Python.
+Lastly, the complete component-key is encoded in URL-friendly format.
+
+The final step executed by Sonar gatherer class is to obtain the code quality metrics from the server for each and every file gathered. 
+
+To start with, a target URL is composed from Sonar server address, component key and and a comma-separated list of metrics to be obtained. As part of that operation a specified list of code quality metrics is retrieved. The list is defined in \texttt{sonar\_metrics\_enum.py} and it is comprised of 66 different values, 7 of which are not representing Sonar metrics, but information gathered from other sources, i.e. author, timestamp, etc. 
+
+The response from Sonar server, this time in JSON format, is parsed, and sorted. It should be noted, and it will be discussed in due course, that not all metrics are obtainable for every file gathered. In the instance that a metric is missing, the empty value is replaced with $-1$ as this value, as opposed to $0$ is not a legal value for any code quality metrics. 
+
+One thing of note is that for different source code languages different metrics, especially with regards to the code coverage metrics can be provided by Sonar. For example, for JavaScript-based languages such as Angular JS there is a separate position for integration, or IT, coverage, whereas for Java and other JVM based languages that metric is rarely provided. In JVM based languages it has been folded into the \texttt{overall code coverage} metric instead.
+
+The sorting is performed to ensure that all metrics, which will shortly represent columns in the generated CSV dataset, appear in the same order. Otherwise, it would be quite difficult to execute all subsequent elements of the analysis.
+
+All collected metrics, compiled into a dictionary, where a given file's name is the key and value is represented by metrics is returned to the \texttt{gatherer\_main.py} for persisting.
+
+\subsubsection{Author Detail Transformer}\label{sec:source-code:author-encoder}
+It is invoked after code quality metrics have been gathered by \texttt{SonarMetricsGatherer} class. It transforms full names of commit authors into code names. Given that there is no single format of displaying full name in a commit it needed to be robust enough to detect the format of the name. 
+
+Occasionally the commits were not signed with author's full name but their corporate handle, which meant that the transformer had to accommodate those cases as well.
+
+\subsubsection{Other Utilities}
+
+

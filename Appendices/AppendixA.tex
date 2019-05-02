@@ -1,3 +1,32 @@
-\chapter{Code Snippets}
+\chapter{Appendix A}
+\begin{landscape}
 
-Put appendix material in this section e.g. code snippets
+\begin{code}
+\captionof{listing}{Main data gathering component - the coordinator}
+\label{code:gatherer_main.py}
+\inputminted{python}{source_code/gatherer.py}
+\end{code}
+
+\begin{code}
+\captionof{listing}{JIRA Connector - extracts relevant metrics from a given JIRA ticket}
+\label{code:jira-connector.py}
+% \begin{minted}[breaklines]{python}
+\inputminted{python}{source_code/jira_connector.py}
+% \end{minted}
+\end{code}
+
+\begin{code}
+ \captionof{listing}{Bitbucket connector - retrieves commit metrics for a given file}
+ \label{code:bitbucket.py}
+\inputminted{python}{source_code/bitbucket_connector.py}
+ \end{code}
+ 
+ \begin{code}
+ \captionof{listing}{Sonar connector - retrieves code quality metrics for a given file}
+ \label{code:sonar-gatherer.py}
+ 
+ \inputminted{python}{source_code/SonarMetricsGatherer.py}
+ 
+ \end{code}
+
+\end{landscape}
