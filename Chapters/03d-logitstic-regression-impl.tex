@@ -1,49 +1,15 @@
-\subsubsection{Implementing Logistic Regression}
+\subsubsection{Implementing Logistic Regression}\label{sec:exec:log-reg}
 
-\begin{code}
-\captionof{listing}{Logistic Regression Implementations}
-\label{code:logistic-reg-impl}
-\begin{minted}[breaklines]{python}
-def print_logistic_regression_scores(penalty, algorithm, x_test, y_test):
-    print('Score for {0} is {1}'.format(penalty, algorithm.score(x_test, y_test)))
-    print('Probability of classification for {0} is {1}'.format(penalty, algorithm.predict_proba(x_test)))
+Execution of Logistic Regression model was conducted in a number of steps. First a control analysis was established with the model being run against the unscaled datasets, both the upsampled and the downsampled ones. In each of the model execution the following steps were executed in order:
+\begin{itemize}
+    \item the dataset is split into the features used for predictions and the target feature to be predicted, $X$ and $y$ respectively
+    \item the X  and y are split into the \texttt{train} and \texttt{test} sets. The \texttt{train} subset is used to train the model and the \texttt{test} subset is used to then verify the predictions made using data points previously unseen by the model in question. The split is $75\%$ data points dedicated to the \texttt{train} subset and $25\%$ to the \texttt{test} subset.
+    \item the model is created with a given regularization penalty.
+    \item model is trained on the training data subset.
+    \item coefficients graph generated. This graph provides visual representation as to which features were significant towards predicting the outcome and which were penalized by the regularization algorithm.
+    \item model scoring function is executed on the test subset. The scoring function provides a single decimal number between 0 and 1 and represents the mean accuracy of making a correct prediction. 
+    \item statistics about the probability of predicting each class are compiled for the data points.
+\end{itemize}
 
-def run_logistic_regression(df, penalty, target_col, other_cols_to_drop):
-    # run te regression
-    other_cols_to_drop = np.append(other_cols_to_drop, [target_col])
-    X = df.drop(other_cols_to_drop, axis='columns')  # X = features
-    y = df[target_col]  # y = prediction target
-
-    lr_l1 = LogisticRegression(penalty=penalty)
-    x_train, x_test, y_train, y_test = train_test_split(X, y)
-    lr_l1.fit(x_train, y_train)
-    
-    # generate graph depicting coefficient impact on model
-    ax.set(
-        title='Coefficients for Logistic Regression with ' + penalty + ' Regularization',
-        xlabel='Coefficient',
-        ylabel='Value'
-    );
-    plt.plot(lr_l1.coef_.flatten())
-
-    print_logistic_regression_scores(penalty, lr_l1, x_test, y_test)
-
-
-def run_scaled_logistic_regression(X, penalty, y, fig_i=0):
-    plt.figure(fig_i)
-    lr_l1 = LogisticRegression(penalty=penalty)
-    x_train, x_test, y_train, y_test = train_test_split(X, y)
-    lr_l1.fit(x_train, y_train)
-    ax.set(
-        title='Coefficients for Logistic Regression with ' + penalty + ' Regularization',
-        xlabel='Coefficient',
-        ylabel='Value'
-    );
-    plt.plot(lr_l1.coef_.flatten())
-
-    score = lr_l1.score(x_test, y_test)
-    proba = lr_l1.predict_proba(x_test)
-
-    return (score, proba)
-\end{minted}
-\end{code}
+Subsequently, each of the scaled models have been analyzed and compared. In order to asses the accuracy of the model 2 parameters were used the models scoring function has been used to provide the accuracy and the \texttt{proba} function was used to determine the probability of each of the classes being assigned, per a given data point.
+Predicting the probability of selection is an important part of the process as it ensures that the classes are applied evenly and to not become unbalanced. The ideal average result for the probability of a data point being classified as either label is $0.5$ or $50\%$.
