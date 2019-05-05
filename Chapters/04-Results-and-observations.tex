@@ -1,9 +1,11 @@
 \chapter{Results and Observations}\label{chp:results-and-observations}
 \section{Logistic Regression Results}\label{sec:results:log-reg}
-\todo{Need to compare LogReg L1 and L2 results to those on non-regularized and see if there was any change}
-\todo{Need to Speak to why decision tree results were so much better than those of logstic regression}
+% \todo{Need to compare LogReg L1 and L2 results to those on non-regularized and see if there was any change}
+% \todo{Need to Speak to why decision tree results were so much better than those of logistic regression}
 
 \todo{- What are the results in, F1? TF/TP, RSS?}
+Due to the implementation specification of the Logistic Regression algorithm forcing L2 regularization upon model by default it was not possible to obtain non-regularized results for comparison.
+
 The results for the analysis of both upsampled and downsampled datasets, as well as L1 and L2 regularization methods have been compiled into Table \ref{tbl:results:log-reg}. From same it can be observed that the probability of a valid classification of \isBug{} target variable is between 52\% - 63.9\% between different scaling methods used to normalize given data.
 
 On average the dataset where the upsampling method was used to achieve class balance has provided better results. 
@@ -48,3 +50,6 @@ quantile-normal & 99.66 & 87.87 \\
 quantile-uniform & 99.37 & 87.6 \\ \bottomrule
 \end{tabular}
 \end{table}
+
+\section{Comparison of model results}
+From the results compiled for individual models, sections \ref{sec:results:log-reg}-\ref{sec:results:decision-tree}, it is clearly visible that the Decision Tree Classifier was significantly more successful at generating accurate predictions. It comes expected, as the decision tree model has been proven out to be very successful in analyzing datasets with high feature collinearity \cite{Bertsimas2017Cart} such as this one. 

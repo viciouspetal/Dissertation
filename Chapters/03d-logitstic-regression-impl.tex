@@ -4,12 +4,15 @@ Execution of Logistic Regression model was conducted in a number of steps. First
 \begin{itemize}
     \item the dataset is split into the features used for predictions and the target feature to be predicted, $X$ and $y$ respectively
     \item the X  and y are split into the \texttt{train} and \texttt{test} sets. The \texttt{train} subset is used to train the model and the \texttt{test} subset is used to then verify the predictions made using data points previously unseen by the model in question. The split is $75\%$ data points dedicated to the \texttt{train} subset and $25\%$ to the \texttt{test} subset.
-    \item the model is created with a given regularization penalty.
+    \item the model is created with either L1 or L2 regularization penalty.
     \item model is trained on the training data subset.
     \item coefficients graph generated. This graph provides visual representation as to which features were significant towards predicting the outcome and which were penalized by the regularization algorithm.
     \item model scoring function is executed on the test subset. The scoring function provides a single decimal number between 0 and 1 and represents the mean accuracy of making a correct prediction. 
-    \item statistics about the probability of predicting each class are compiled for the data points.
+    \item statistics about the probability of predicting each class are compiled for the data points. Predicting the probability of selection is an important part of the process as it ensures that the classes are applied evenly and to not become unbalanced. The ideal average result for the probability of a data point being classified as either label is $0.5$ or $50\%$.
 \end{itemize}
 
-Subsequently, each of the scaled models have been analyzed and compared. In order to asses the accuracy of the model 2 parameters were used the models scoring function has been used to provide the accuracy and the \texttt{proba} function was used to determine the probability of each of the classes being assigned, per a given data point.
-Predicting the probability of selection is an important part of the process as it ensures that the classes are applied evenly and to not become unbalanced. The ideal average result for the probability of a data point being classified as either label is $0.5$ or $50\%$.
+Subsequently, each of the scaled models have been analyzed using the steps outlined and compared. The only difference between running 1 model at a time and that of iterative execution is the additional functionality has been added to plot the model coefficients in their individual graphs. If executed as is, coefficient graphs would have been plotted in the same plane for all scaled datasets, making it hard to determine how each model fared with regards to the regularized feature selection. 
+
+Regularization is applied even at the initial control group as the model implementation used forces it to be specified. In the case of the Logistic Regression model applied via sci-kit learn package the default regularization applied is L2, therefore making it impossible to obtain non-regularized results for that algorithm.
+
+

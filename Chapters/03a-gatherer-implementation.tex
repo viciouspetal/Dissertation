@@ -51,7 +51,7 @@ All of the communication with JIRA server happens over its publicly available RE
 
 The JIRA connector then interrogates the server by executing \mintinline{html}{/api/2/issue/{jira_key}} in order to obtain an ID attribute for each ticket. Ticket ID is a necessary parameter required in order to obtain the list of files committed under each ticket.
 
-In the next step, a list of commits for a given JIRA ID is obtained for all code repositories from the \mintinline{html}{/dev-status/1.0/issue/detail?issueId={jira_id}&applicationType=stash} URL. The server response is in JSON format and as Figure \ref{fig:source-code:jira:commit-response} illustrates it is possible for any given commit to include multiple files, per repository. Additionally, many commits can be made under the same ticket, under many repositories. Based on Figure \ref{fig:source-code:jira:commit-response}, it should be assumed that the all of the next steps are executed for all files, under any commit in any repository provided by the above REST call.
+In the next step, a list of commits for a given JIRA ID is obtained for all code repositories from the \mintinline{html}{/dev-status/1.0/issue/detail?issueId={jira_id}} URL. The server response is in JSON format and as Figure \ref{fig:source-code:jira:commit-response} illustrates it is possible for any given commit to include multiple files, per repository. Additionally, many commits can be made under the same ticket, under many repositories. Based on Figure \ref{fig:source-code:jira:commit-response}, it should be assumed that the all of the next steps are executed for all files, under any commit in any repository provided by the above REST call.
 \begin{figure}[!h]
     \centering
     \includegraphics[scale=0.7]{Figures/gatherer/jira_connector_getting_commit_files_response.PNG}
@@ -126,7 +126,7 @@ The data provided by JIRA server as described in section \ref{sec:source-code:ji
 
 The interrogation as is the case with JIRA, happens over public REST API provided by Bitbucket server by making a call to 
 \begin{minted}[breaklines]{html}
-<server_name>/rest/api/1.0/projects/{repo_code}/repos/{repo_name}/commits/{commit_id}
+<server_name>/rest/api/1.0/projects/{repo_code} /repos/{repo_name}/commits/{commit_id}
 \end{minted} 
 URL.
 The response is given in JSON format and as per Figure \ref{fig:source-code:bitbucket-prev-commit-response} it contains only 4 relevant properties per given commit made on a given file.
@@ -148,7 +148,7 @@ Complete code listing is available from code excerpt \ref{code:bitbucket.py}.
 Using data gathered from JIRA and Bitbucket in sections \ref{sec:source-code:jira} and \ref{sec:source-code:bitbucket} Sonar server is contacted for each and every file, for each and every commit under each JIRA ticket. 
 
 In order to retrieve any metrics from Sonar server first a property called a key needs to be obtained. Initially it was attempted to dynamically generate the project key from data already at hand, however, Sonar server doesn't display any easily identifiable pattern in generating its project keys. Instead, a call to, a now deprecated but still functioning REST endpoint, has been made over the publicly available API. 
-The call is always made to \mintinline{html}{<server_name>/api/projects/index?search=<project_name>\%20<default_branch>}, and while the "server\_name" and "project\_name" properties are easily obtainable and static in nature, the "default\_branch" property can be different per project basis and depends solely on the setup of a given Bitbucket repository. Currently, in the gathered data only 2 default branches have been detected: "develop" and "master", however, there is a possibility that additional branch names could be present in different data. In general, "master" branch has been used in JavaScript projects and "develop" has been used as a default for Java and Kotlin based repositories. However, given that this is just an observation and it does not carry 100\% certainty, for each project key to be retrieved using above endpoint, both eventualities had to be checked. 
+The call is always made to \mintinline[breaklines]{html}{<server_name>/api/projects/index?search=<project_name>\%20<default_branch>}, and while the "server\_name" and "project\_name" properties are easily obtainable and static in nature, the "default\_branch" property can be different per project basis and depends solely on the setup of a given Bitbucket repository. Currently, in the gathered data only 2 default branches have been detected: "develop" and "master", however, there is a possibility that additional branch names could be present in different data. In general, "master" branch has been used in JavaScript projects and "develop" has been used as a default for Java and Kotlin based repositories. However, given that this is just an observation and it does not carry 100\% certainty, for each project key to be retrieved using above endpoint, both eventualities had to be checked. 
 
 Curiously, the response in this case was returned in XML format and not JSON, which meant that an additional method of parsing out the data had to be devised. 
 The easiest solution has been selected, where the XML response in question was automatically converted to a JSON representation. 

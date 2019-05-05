@@ -184,11 +184,9 @@ From the same definition it can be deducted that impact of \textalpha{} will be 
 \end{enumerate}
 
 \subsubsection{Decision Tree Classifier}
-Decision Tree for classification is a non-parametric method of supervised machine learning. Along with Decision Tree Regression, it was first proposed in 1984\cite{BreimanCart1984} and it was intended as a top-down approach applied to a given set of data points. To find solutions a decision tree will make a number of sequential, hierarchical, or top-down, decisions about the outcome variable based on the predictor data. 
+Decision Tree for classification is a non-parametric method of supervised machine learning. Along with Decision Tree Regression, it was first proposed in 1984\cite{breimanCart1984} and it was intended as a top-down approach applied to a given set of data points. To find solutions a decision tree will make a number of sequential, hierarchical, or top-down, decisions about the outcome variable based on the predictor data. 
 
-A very simplistic decision tree for classification has been represented in Figure \ref{fig:decision-tree-sample}, where white nodes are the decision boundary nodes or branches, and green ones represent terminal nodes or leaf nodes. One of the big advantages of this method is its human readability - even the more complex trees can still be interpreted and traversed by humans with relative ease \todo{will need a reference for this}. 
-
-It is a model based purely on data from previous observations of a given target variable and no assumptions are made with regards to the distribution of errors or that of the data and it is considered a highly versatile model\cite{ensembleMethodsInMachineLearningDietterich} well able to explore the solution space without getting stuck in the local search optimum solution\cite{ensembleMethodsInMachineLearningDietterich}. However, at the same time, the model's reliance on previous observations indicates that the algorithm will terminate as soon as the optimal solution fitting the training data is found.
+A very simplistic decision tree for classification has been represented in Figure \ref{fig:decision-tree-sample}. The tree is built top-down, starting from a root node corresponding to the best predictor for the dataset, which branches would extend downwards from. Going down the tree, depending on the position, the nodes would carry a different meaning. Terminal nodes, coloured in green, are points where no further decisions can be made, are called leaf nodes. The white nodes represent the decision boundary representing the points at which a classification rule, or classifier, is executed. The method serves in creating a consistent and standardized way of predicting what class should be applied to a given data point.
 
 \begin{figure}[!h]
     \centering
@@ -197,7 +195,12 @@ It is a model based purely on data from previous observations of a given target 
     \label{fig:decision-tree-sample}
 \end{figure}
 
+As the generation the tree progresses the classifiers are applied, depending on the features contained in the dataset, and continuously applied to each subset to generate additional nodes iteratively \cite{Bertsimas2017Cart} in each step while at the same time keeping track of the end structure of the tree. To an extent the method could be compared to a flowchart where no feedback loops are allowed, therefore making the model easy to explain as it is relatively easy to visualize the end structure of the tree, subject to the number of prediction-contributing features.
 
+Given the mode of operation, the function implemented is step-wise, not linear, enabling the model to accommodate more complex relationships between the data. 
+Additionally, it makes it less susceptible to the effects of feature collinearity, making it a highly valuable model candidate for datasets with high correlation factor values between features.
+
+CART models, the decision tree classifier is part of, are models based purely on data from previous observations \cite{breimanCart1984} of a given target variable and no assumptions are made with regards to the distribution of errors or that of the data and it is considered a highly versatile model \cite{ensembleMethodsInMachineLearningDietterich} well able to explore the solution space without getting stuck in the local search optimum solution \cite{ensembleMethodsInMachineLearningDietterich}. However, at the same time, the model's reliance on previous observations indicates that the algorithm will terminate as soon as the optimal solution fitting the training data is found \cite{ensembleMethodsInMachineLearningDietterich} indicating that there is a possibility of an even more accurate solution to be devised in the future.
 
 \subsection{Data Modelling}
 

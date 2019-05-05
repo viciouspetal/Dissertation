@@ -1,29 +1,15 @@
 \subsubsection{Implementing Decision Tree classification}
-\begin{code}
-\captionof{listing}{Generic Decision Tree Implementation}
-\label{code:generic-decision-tree-impl}
-\begin{minted}[breaklines]{python}
-def run_scaled_decision_tree_classification(X, y):
-    x_train, x_test, y_train, y_test = train_test_split(X, y)
+The decision tree model is first executed on the unscaled downsampled and upsampled datasets in order to establish baseline for both datasets when examining the results of the scaled models.
 
-    dt = DecisionTreeClassifier()
-    dt.fit(x_train, y_train)
-    dt_predict = dt.predict(x_test)
+The execution was conducted in the following steps:\
+\begin{itemize}
+    \item the dataset under analysis is split into the features used for predictions and the target feature to be predicted, $X$ and $y$ respectively.
+    \item the $X$ and $y$ are split into the \texttt{train} and \texttt{test} sets. The \texttt{train} subset is used to train the model and the \texttt{test} subset is used to then verify the predictions made using data points previously unseen by the model in question. The split is $75\%$ data points dedicated to the \texttt{train} subset and $25\%$ to the \texttt{test} subset.
+    \item the decision tree model is instantiated
+    \item the model is trained by fitting the training set 
+    \item new unseen data points are simulated using the test subset
+    \item Sci-kit Learn's \texttt{accuracy\_score} function is utilized to determine the accuracy of the prediction made using the simulated new data points and the features of the test subset. The result is presented as a floating point number between 0 and 1, with values closer to 1 representing higher accuracy of the model
+    \item the result is multiplied by 100 in order to convert it to a $\%$ value.
+\end{itemize}
 
-    dt_acc_score = accuracy_score(y_test, dt_predict)
-
-    return dt_acc_score
-\end{minted}
-\end{code}
-
-\begin{code}
-\captionof{listing}{Running Decision Tree Classification}
-\label{code:generic-decision-tree-impl}
-\begin{minted}[breaklines]{python}
-fig_i = 0 # ensuring that each coefficient graph exists in its own file
-for method in scaled_data_ref_map_downscaled.keys():
-    score = run_scaled_decision_tree_classification(
-        scaled_data_ref_map_downscaled[method], y)
-    print('For {0} score is: {1} '.format(method, format_dec(score*100)))
-\end{minted}
-\end{code}
+The same steps are conducted for all of the scaled datasets and the final accuracy score, as per method described is presented.

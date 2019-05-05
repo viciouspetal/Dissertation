@@ -15,6 +15,7 @@
 \usepackage[table]{xcolor}
 
 % additional packages
+\usepackage[toc,page]{appendix}
 \usepackage{todonotes}
 \usepackage{booktabs} % table border formatting
 \usepackage{multicol} 
@@ -255,10 +256,12 @@ The acknowledgements and the people to thank go here, don't forget to include yo
 % \begin{comment}
 \addtocontents{toc}{\vspace{2em}} % Add a gap in the Contents, for aesthetics
 
-\appendix % Cue to tell LaTeX that the following 'chapters' are Appendices
-
+% \appendix % Cue to tell LaTeX that the following 'chapters' are Appendices
+\begin{appendices}
+\lhead{\emph{Appendix A}}  % Change the left side page header to "Bibliography"
 \input{Appendices/AppendixA}	% Appendix Title
 
+\end{appendices}
 % \input{Appendices/AppendixB} % Appendix Title
 
 %\input{Appendices/AppendixC} % Appendix Title
