@@ -13,7 +13,7 @@ Progressively, an analysis of any missing values from all the columns was conduc
 \subsubsection{Columns with all values at 0}\label{sec:impl-data-analysis:all-cols-at-0}
 Next step was to check if there were any features present where all values were at 0 value. It has been determined that a column where all values are of 0 value would not contribute towards the prediction and therefore can be removed. The list of 19 removed columns is presented in Table \ref{tbl:zero-value-columns}. This step left the dataset with 6109 rows and 47 columns.
 
-\begin{table}[h!]
+\begin{table}[!h]
 \centering
 \caption{Columns with all values at 0}
 \label{tbl:zero-value-columns}
@@ -47,14 +47,14 @@ for col in cols:
 \end{minted}
 \end{code}
 
-\begin{figure}[h!]
+\begin{figure}[!h]
     \centering
     \includegraphics[scale=0.6]{\figpath/High_Variance_Columns_Plot.png}
     \caption{Attributes with high variance}
     \label{fig:high-variance}
 \end{figure}
 
-\begin{table}[h!]
+\begin{table}[!h]
 \centering
 \caption{Missing Values per Column}
 \label{tbl:missing-values-per-col}
@@ -100,12 +100,6 @@ In the last step dataframes representing the majority and minority, now resample
 
 
 For complete source code listing refer to sample \ref{code:resampling-impl}.
-
-
-\subsubsection{Feature Distribution}\label{sec:impl-data-analysis:feature-dist}
-\todo{fill it out}
-
-\subsubsection{Outliers}\label{sec:impl-data-analysis:outliers}
 
 \subsubsection{Data Correlation}\label{sec:impl-data-analysis:corr:generic-approach}
 The following section will focus on identifying data correlation between features present in the dataset. The methods employed will be both numerical and visual. A numerical method has been employed for brevity and as verification for the visual method as it believed that with 40+ features it will be quite cumbersome to distinguish between high and low correlation values in a matrix.
@@ -181,7 +175,7 @@ and it's correlation statistics can be observed in Figure \ref{fig:correlation-c
     \item \overallUncoveredConditions and \uncoveredConditions{}
 \suspend{enumerate}
 
-\begin{figure}[h!]
+\begin{figure}[!h]
     \centering
     \includegraphics[scale=0.7]{\figCorrPath/Coverage_Metrics_Correlation_Subplot.png}
     \caption{Code Coverage Metrics Correlation Subplot}
@@ -190,7 +184,7 @@ and it's correlation statistics can be observed in Figure \ref{fig:correlation-c
 \FloatBarrier
 
 Based on the scatter plot, generated from using code excerpt \ref{code:feat-transf:scatterplot}, depicted in Figure \ref{fig:candidate1-scatterplot} constructed for the transformation Candidate 1 listed above, it is thought that the attributes have a positive, almost perfectly linear relationship between one another, meaning that as one attribute increases in value so does the corresponding one, furthermore the increase or decrease in value is of the same magnitude.
-\begin{figure}[h!]
+\begin{figure}[!h]
     \centering
     \includegraphics[scale=0.9]{\figCorrPath/Attribute_Relationship_in_Candidate_1.png}
     \caption{Relationship between \overallBranchCoverage{} and \branchCoverage{} attributes}
@@ -220,7 +214,7 @@ From the investigation conducted it was deemed fair to conclude that it doesn't 
 
 Candidate 2 analysis started with the charting of a scatter plot for the selected attributes, the \overallUncoveredLines{} and \uncoveredLines{}, presented in Figure \ref{fig:candidate2-scatterplot}, and as with Candidate 1 displayed a positive linear relationship between the data points, with the majority of data focused close to 0 value.
 
-\begin{figure}[h!]
+\begin{figure}[!h]
     \centering
     \includegraphics[scale=0.9]{\figCorrPath/Attribute_Relationship_in_Candidate_2.png}
     \caption{Relationship between \overallUncoveredLines{} and \uncoveredLines{} attributes}
@@ -239,7 +233,7 @@ In case of Candidate 2 it  has been decided to retain \overallUncoveredLines{} a
 
 Given the depiction of both the linear relationship between the multiple  attributes of \overallCoverage{}, \overallLineCoverage{},\coverage{} and \lineCoverage{}, presented in Figure \ref{fig:candidate3-pairplot} and the distribution, provide on the diagonal it was summarily concluded that the attributes follow the same trends and only one of the four should be retained. Therefore, based on previous domain knowledge of the metrics \overallCoverage{} was deemed the most encompassing and has been retained.
 \todo{the pair plot needs an update of the title as it's not distribution. Plus need to plot distributions as pair plot diagonal is NOT a representation of distribution}
-\begin{figure}[h!]
+\begin{figure}[!h]
     \centering
     \includegraphics[scale=0.5]{\figCorrPath/Attribute_Relationship_in_Candidate_3.png}
     \caption{Relationship between multiple attributes}
@@ -250,14 +244,14 @@ Given the depiction of both the linear relationship between the multiple  attrib
 
 The last feature transformation will be conducted between \overallUncoveredConditions{} and \uncoveredConditions{} attributes. In Figure \ref{fig:candidate4-scatterplot} it can be observed a perfectly linear relationship between the two attributes under investigation. Additionally, a change in one attribute corresponds directly to an increase of the corresponding attribute not only in the direction of the change but also in the magnitude. Furthermore, from Figure \ref{fig:candidate4-distribution} again a perfectly aligned distribution of both attributes can be observed leading to a conclusion that the attributes under question are equivalent.
 
-\begin{figure}[h!]
+\begin{figure}[!h]
     \centering
     \includegraphics[scale=0.7]{\figCorrPath/Attribute_Relationship_in_Candidate_4.png}
     \caption{Relationship between \overallUncoveredConditions{} and \uncoveredConditions{} attributes}
     \label{fig:candidate4-scatterplot}
 \end{figure}
 
-\begin{figure}[h!]
+\begin{figure}[!h]
     \centering
     \includegraphics{\figCorrPath/Attribute_Distribution_in_Candidate_4.png}
     \caption{Distribution of \overallUncoveredConditions{} and \uncoveredConditions{} attributes}
@@ -430,12 +424,14 @@ However, when drawing from the domain knowledge of Sonar metrics, \violations{} 
 % \FloatBarrier
 
 \paragraph{Code Duplication Metrics}\label{sec:impl-data-analysis:corr:code-duplication}
+
 \begin{figure}
     \centering
     \includegraphics[scale=0.75]{Figures/correlation/Duplication_Metrics_Correlation.png}
     \caption{Code Duplication Metrics Correlation Subplot}
     \label{fig:correlation-code-duplication-metrics-subplot}
 \end{figure}
+
 Based on the correlation graph for code duplication metrics the following candidate has been chosen for the analysis:
 \resume{enumerate}
     \item \duplicatedBlocks{}, \duplicatedFiles{}, \duplicatedLines{} and \duplicatedLinesDensity{}
@@ -444,13 +440,10 @@ Based on the correlation graph for code duplication metrics the following candid
 \begin{figure}
     \centering
     \includegraphics[scale=0.75]{Figures/correlation/Attribute_Relationship_in_Duplication_Metrics.png}
-    \caption{Code Duplication Metrics Correlation Subplot}
-    \label{fig:correlation-code-duplication-metrics-subplot}
+    \caption{Relationship between multiple attributes}
+    \label{fig:candidate10-distribution}
 \end{figure}
 
 
 \textbf{In conclusion} no strong opportunity for transformation has been found between code duplication metrics as the correlation appears to be of small magnitude. The only exception has been displayed by \duplicatedBlocks{} and \duplicatedFiles{} features that showed a strong negative correlation.
 \FloatBarrier
-
-\subsubsection{Addressing High Variance in Dataset}\label{sec:impl-data-analysis:dealing-with-variance}
-This section is intended to evaluate the variance in the dataset with subsequent subsections evaluating different ways of dealing with high variance features by scaling features to the same order of magnitude.
