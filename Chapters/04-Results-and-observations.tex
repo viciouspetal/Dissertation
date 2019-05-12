@@ -1,14 +1,15 @@
 \chapter{Results and Observations}\label{chp:results-and-observations}
 \section{Logistic Regression Results}\label{sec:results:log-reg}
-% \todo{Need to compare LogReg L1 and L2 results to those on non-regularized and see if there was any change}
 % \todo{Need to Speak to why decision tree results were so much better than those of logistic regression}
 
 \todo{- What are the results in, F1? TF/TP, RSS?}
 Due to the implementation specification of the Logistic Regression algorithm forcing L2 regularization upon model by default it was not possible to obtain non-regularized results for comparison.
 
-The results for the analysis of both upsampled and downsampled datasets, as well as L1 and L2 regularization methods have been compiled into Table \ref{tbl:results:log-reg}. From same it can be observed that the probability of a valid classification of \isBug{} target variable is between 52\% - 63.9\% between different scaling methods used to normalize given data.
+The scoring function provided by the underlying implementation of the Sci-Kit Learn library used defines it as the mean accuracy of correctly predicting the target value ($y$) for a given set of features ($X$). It is presented as a decimal number in the range of $ 0 to 1$, however, for the purpose of defining it as percentage value all scores from underlying models have been multiplied by $100\%$.
 
-On average the dataset where the upsampling method was used to achieve class balance has provided better results. 
+The results for the analysis of both up-sampled and down-sampled datasets, as well as L1 and L2 regularization methods have been compiled into Table \ref{tbl:results:log-reg}. From same it can be observed that the probability of a valid classification of \isBug{} target variable is between 50.4\% - 63.9\% between different scaling methods used to normalize given data.
+
+On average the dataset where the upsampling method was used to achieve class balance has provided better results. It is expected that the smaller number of features exhibiting skewed distribution, as per Section \ref{sec:impl-data-analysis:feature-dist-after-scaling}, had an impact on that. It should also be noted that the difference in accuracy between upsampled and downsampled datasets, for equivalent scalers, has been up to $\approx 3.8\%$.
 
 From regularization point of view, L2 was more successful on average.
 
@@ -20,13 +21,13 @@ The probability of class 0 and 1 class, corresponding to a given file being a bu
 \begin{tabular}{@{}lllll@{}}
 \toprule
  & Up L1 & Down L1 & Up L2 & Down L2 \\ \midrule
-unmodified & 0.588 & 0.588 & 0.563 & 0.558 \\
-min-max & 0.539 & 0.515 & 0.550 & 0.574 \\
-max-abs & 0.528 & 0.544 & 0.509 & 0.504 \\
-standard & 0.547 & 0.536 & 0.544 & 0.582 \\
-power-yeo-johnson & 0.617 & 0.631 & 0.639 & 0.542 \\
-quantile-normal & 0.536 & 0.563 & 0.604 & 0.617 \\
-quantile-uniform & 0.609 & 0.571 & 0.625 & 0.625 \\ \bottomrule
+unmodified & 58.8 & 58.8 & 56.3 & 55.8 \\
+min-max & 53.9 & 51.5 & 55.0 & 57.4 \\
+max-abs & 52.8 & 54.4 & 50.9 & 50.4 \\
+standard & 54.7 & 53.6 & 54.4 & 58.2 \\
+power-yeo-johnson & 61.7 & 63.1 & 63.9 & 63.6 \\
+quantile-normal & 53.6 & 56.3 & 60.4 & 61.7 \\
+quantile-uniform & 60.9 & 57.1 & 62.5 & 62.5 \\ \bottomrule
 \end{tabular}
 \end{table}
 
@@ -53,3 +54,5 @@ quantile-uniform & 99.37 & 87.6 \\ \bottomrule
 
 \section{Comparison of model results}
 From the results compiled for individual models, sections \ref{sec:results:log-reg}-\ref{sec:results:decision-tree}, it is clearly visible that the Decision Tree Classifier was significantly more successful at generating accurate predictions. It comes expected, as the decision tree model has been proven out to be very successful in analyzing datasets with high feature collinearity \cite{Bertsimas2017Cart} such as this one. 
+
+It has been consciously decided against redistributing the data before applying the Logistic Regression model. It is expected that this decision had an impact on the results of the linear model, which by its definition would perform better should all data be more normally distributed. It should be noted, as discussed in detail in Section \ref{sec:impl-data-analysis:feature-dist}, that in general the skewness of the data while present was not significant in most features.
