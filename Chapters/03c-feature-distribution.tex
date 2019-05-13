@@ -4,8 +4,8 @@ Feature distribution is an integral part of an analysis, especially when some mo
 The purpose of the underlying section is to analyze the distribution of data for each feature present in the dataset. Additionally, it will be determined if any of the scaling methods applied have affected the data distribution.
 
 \paragraph{Before Data Scaling}\label{sec:impl-data-analysis:feature-dist-before-scaling}
-In order to determine the data distribution the following methodology has been applied. 
-To begin with, mean and median was calculated for each feature to determine the skew of the data distribution. The skew has been determined by subtracting mean from median with negative values representing left skew and positive ones, a right skew to the distribution. The results of the operation can be observed in Figure \ref{fig:feature-dist:skew:unmodified-upsample}. It should be noted that, for the unscaled data \fileAgeInSec{} feature has been removed as the result of $median - mean = -127705.55$ would completely overshadow the other metrics present in the graph. Suffice to say that \fileAgeInSec{} feature presented a significant left skewness of the data distribution in the unscaled dataset.
+In order to determine the data distribution, the following methodology has been applied. 
+To begin with, the mean and median was calculated for each feature to determine the skew of the data distribution. The skew has been determined by subtracting mean from median with negative values representing left skew and positive ones, a right skew to the distribution. The results of the operation can be observed in Figure \ref{fig:feature-dist:skew:unmodified-upsample}. It should be noted that for the unscaled data \fileAgeInSec{} feature has been removed as the result of $median - mean = -127705.55$ would completely overshadow the other metrics present in the graph. Suffice to say that \fileAgeInSec{} feature presented a significant left skewness of the data distribution in the unscaled dataset.
 
 \begin{figure}[!h]
     \centering
@@ -39,16 +39,16 @@ Similar findings have been confirmed for the down-sampled dataset with Figure \r
     \label{fig:feature-dist:downsampled-all-feature-dist}
 \end{figure}
 
-Despite the data resampling process being random it can be observed from above figures that the data distribution and its skewness is approximately the same in both datasets. Therefore, it would stand to reason that the distribution after scaling has been applied to the dataset will exhibit the same pattern for both up-sampled and don-sampled datasets.
+Despite the data resampling process being random, it can be observed from the above figures that the data distribution and its skewness is approximately the same in both datasets. Therefore, it would stand to reason that the distribution after scaling has been applied to the dataset will exhibit the same pattern for both up-sampled and downsampled datasets.
 
-\textbf{In conclusion}, most of the features in either resampled dataset exhibit a left skew in the data distribution. It is therefore assumed that any linear model analysis may be affected. It has been decided against redistributing the data at this stage as it is yet to be verified if data scaling will have any kind of an affect on the distribution of the feature data.
+\textbf{In conclusion}, most of the features in either resampled dataset exhibit a left skew in the data distribution. It is therefore assumed that any linear model analysis may be affected. It has been decided against redistributing the data at this stage as it is yet to be verified if data scaling will have any kind of an effect on the distribution of the feature data.
 \FloatBarrier
 
 \paragraph{After Data Scaling}\label{sec:impl-data-analysis:feature-dist-after-scaling}
 Similarly to the process described in preceding Section \ref{sec:impl-data-analysis:feature-dist-before-scaling}, in order to determine the skewness of the data mean value has been subtracted from a median value per feature, per scaler applied. 
 
-In comparison with the non-scaled datasets, whether upsampled or downsampled only a small changes have been observed with regards to the magnitude of the data skew displayed in all features except \fileAgeInSec{}.
-It has been observed that \fileAgeInSec{} feature has been scaled down significantly and as part of the process the skew of the data observed in the unmodified datasets has been reduced significantly. 
+In comparison with the non-scaled datasets, whether upsampled or downsampled only small changes have been observed with regards to the magnitude of the data skew displayed in all features except \fileAgeInSec{}.
+It has been observed that \fileAgeInSec{} feature has been scaled down significantly and as part of the process, the skew of the data observed in the unmodified datasets has been reduced significantly. 
 
 The change in the data skew of \fileAgeInSec{} can be observed from Figures \ref{fig:} and \ref{fig:}
 
@@ -66,8 +66,8 @@ The change in the data skew of \fileAgeInSec{} can be observed from Figures \ref
     \label{fig:feature-dist:skew:quantile-normal-downsample}
 \end{figure}
 
-Additionally, after scalers have been applied a small difference in the skewness of the data has been observed between up and down-sampled datasets. In general, upsampled datasets had more features exhibiting 0 skewness factor, metric calculated as per formula listed in Section \ref{sec:impl-data-analysis:feature-dist-before-scaling}. Furthermore, skewness factor for features that didn't achieve 0 score have been slightly larger in the up-sampled dataset. 
+Additionally, after scalers have been applied a small difference in the skewness of the data has been observed between up and down-sampled datasets. In general, upsampled datasets had more features exhibiting 0 skewness factor, metric calculated as per formula listed in Section \ref{sec:impl-data-analysis:feature-dist-before-scaling}. Furthermore, the skewness factor for features that didn't achieve the 0 score have been slightly larger in the up-sampled dataset. 
 However, given that the differences observed in data distribution after that scaling operation has been carried out were not significant, bar the expected change in \fileAgeInSec{}, it has been decided to carry on with the analysis as is.
 
-\textbf{In conclusion} only in the case of one feature, the \fileAgeInSec{}, the scaling operations have had any significant impact on the distribution of the data and its skewness. Other features, exhibited minute changes that should not affect underlying analysis.
+\textbf{In conclusion} only in the case of one feature, the \fileAgeInSec{}, the scaling operations have had any significant impact on the distribution of the data and its skewness. Other features, exhibited minute changes that should not affect the underlying analysis.
 \FloatBarrier

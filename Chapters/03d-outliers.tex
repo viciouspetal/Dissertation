@@ -3,18 +3,18 @@ The underlying section will look into the number of outliers in the dataset. Giv
 
 Outliers, also referred to as residuals, are the data points not residing on a given prediction function. The magnitude of a residual is typically defined as the distance of a given data point from the proposed prediction line, in linear models.
 
-Taking into the account the number of features present in the dataset it would be quite unfeasible to present individual box plot graphs per feature. At the same time, since the data is not yet on the same scale it would be difficult to highlight any residuals on aggregate graphs, with multiple features on each plot. Therefore it was decided that a algebraic method will be best employed instead.
+Taking into the account the number of features present in the dataset it would be quite unfeasible to present individual box plot graphs per feature. At the same time, since the data is not yet on the same scale it would be difficult to highlight any residuals on aggregate graphs, with multiple features on each plot. Therefore it was decided that an algebraic method will be best employed instead.
 
 The first step was to collect the following properties for each feature:
 \begin{itemize}
     \item first quartile (Q1)
     \item third quartile (Q3)
-    \item inter quartile range (IQR)
-    \item lower boundary - value below which a data point will be considered an outlier. Set to $1.5x IQR$ below first quartile
+    \item interquartile range (IQR)
+    \item lower boundary - value below which a data point will be considered an outlier. Set to $1.5x IQR$ below the first quartile
     \item upper boundary - value above which a data point will be considered an outlier. Set to $1.5x IQR$ above third quartile
 \end{itemize}
 
-The above metrics are collected into a list. Each list item is a map of attribute to value. The information collected was then converted to a data frame for enabling easy processing. The results compiled can be observed in Tables \ref{tbl:outliers:iqr-at-0} and \ref{tbl:outliers:all-metrics}.
+The above metrics are collected into a list. Each list item is a map of an attribute to value. The information collected was then converted to a data frame for enabling easy processing. The results compiled can be observed in Tables \ref{tbl:outliers:iqr-at-0} and \ref{tbl:outliers:all-metrics}.
 
 \begin{table}[!h]
 \centering
@@ -54,7 +54,7 @@ file\_age\_in\_sec & 87187 & 0 & 3423 & 90610 & 221390.5 \\ \bottomrule
 
 Subsequently, it is checked which columns contain values above their upper outlier boundary. Another list containing the columns without residuals above such value is also compiled. 
 
-At the end of that process it has been concluded that 22 columns contain residuals while 8 do not. Furthermore, counts of residual data points have been obtained and compiled into Table \ref{tbl:outliers:counts-original}. The items in yellow, have been highlighted to signify their $IQR$ value being above 0. From same it can be observed that the most significant numbers of residual data points is observed in \itUncoveredLines{}, closely followed by \overallUncoveredLines{}, \fileAgeInSec{} and \overallUncoveredConditions{} attributes. However, other than \fileAgeInSec{} other mentioned attributes have their $IQR$ value at 0, as per lack of the yellow highlight and given values contained in Table \ref{tbl:outliers:iqr-at-0}, meaning any data points above that value would automatically be treated as an outlier. Judging by Table \ref{tbl:outliers:all-metrics} the attributes are of similar enough scale to be grouped together for visualization, the result of which can be observed from Figures \ref{fig:outliers:boxplot-iqr-above-0-part1} and \ref{fig:outliers:boxplot-iqr-above-0-part2}. 
+At the end of that process, it has been concluded that 22 columns contain residuals while 8 do not. Furthermore, counts of residual data points have been obtained and compiled into Table \ref{tbl:outliers:counts-original}. The items in yellow, have been highlighted to signify their $IQR$ value being above 0. From same it can be observed that the most significant numbers of residual data points is observed in \itUncoveredLines{}, closely followed by \overallUncoveredLines{}, \fileAgeInSec{} and \overallUncoveredConditions{} attributes. However, other than \fileAgeInSec{} other mentioned attributes have their $IQR$ value at 0, as per lack of the yellow highlight and given values contained in Table \ref{tbl:outliers:iqr-at-0}, meaning any data points above that value would automatically be treated as an outlier. Judging by Table \ref{tbl:outliers:all-metrics} the attributes are of similar enough scale to be grouped together for visualization, the result of which can be observed from Figures \ref{fig:outliers:boxplot-iqr-above-0-part1} and \ref{fig:outliers:boxplot-iqr-above-0-part2}. 
 
 \begin{table}[!h]
 \centering
@@ -111,5 +111,5 @@ violations & 103 \\ \hline
     \label{fig:outliers:boxplot-iqr-above-0-part2}
 \end{figure}
 
-\textbf{In Conclusion} it has been proven beyond any doubt that there are a number of outliers in the dataset. At this stage it has been decided against addressing the residual values as it will undergo further processing with regards to scaling as well as due to recognizing that only 1 of the machine learning models used, logistic regression, is susceptible to their presence. 
+\textbf{In Conclusion} it has been proven beyond any doubt that there are a number of outliers in the dataset. At this stage, it has been decided against addressing the residual values as it will undergo further processing with regards to scaling as well as due to recognizing that only 1 of the machine learning models used, logistic regression, is susceptible to their presence. 
 \FloatBarrier

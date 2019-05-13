@@ -1,11 +1,19 @@
 \chapter{Conclusions and Future Work}\label{chp:conclusions-and-future-work}
 \section{Conclusions}\label{sec:conlclusions}
-The results of the analysis provided in the chapter \ref{chp:results-and-observations}, provide a conclusion that it is indeed possible to achieve a high level of accuracy when attempting to predict whether a given source code file is likely to contain a bug from the static code metrics. 
+Given that software bugs carry a cost and such cost is compounded by the lateness of its identification\cite{autoDetectionOfPerfBugs} the subject of the underlying research has been to prove out a machine learning model predicting whether a given source code file being committed to by any number of developers could contain a bug. The prediction is based on source code quality metrics. The significance of the method is that it is based purely on numerical values and after the model is defined it is not envisioned human interaction would be involved. This is opposed by the current, primarily human based bug detection with resources being dedicated to specially trained Quality Assurance (QA) departments as a way of enforcing quality control over software development projects. 
 
-Previous research in the area of automatic prediction of bugs \cite{autoDetectionOfPerfBugs} achieved accuracy of 85\%, however, it focused solely on a specific type of bugs related solely to the performance of a given application.
-The underlying case study, not only broadened the approach by extending the experiment of all types of bugs, but it also raised the accuracy of prediction to, at its most optimized parameters, approximately 99\%.
+Previous research in the area of automatic prediction of bugs \cite{autoDetectionOfPerfBugs} achieved accuracy of at most 85\%, however, it focused solely on a specific type of bugs related exclusively to the performance of a given application. 
+
+The results of the underlying analysis stated in the chapter \ref{chp:results-and-observations}, provide a conclusion that it is indeed possible to achieve a high level of accuracy when attempting to predict whether a given source code file is likely to contain a bug from the static code metrics. Therefore, the underlying case study, not only broadened the existing approach by extending the experiment of all types of bugs, but it also raised the accuracy of prediction to, at its best, approximately 99\%.
+
 
 \section{Future Work}\label{sec:future-work}
-The first potential future research could focus on confirming the underlying findings in monolithic applications as opposed to those following microservice architecture.
+The underlying research while delivering significant results, could in itself be used as a stepping stone into further research.
 
-Following on from that it is envisioned that another branch of research could focus on the impact, or lack thereof, the application architecture can have on the presence of bugs, and the ratio of bug vs. non-bug development, between microservice and monolith architectures.
+Given that the underlying analysis focused solely on proving out the prediction model in an application following the microservice architecture, the first potential future research could focus on confirming the underlying findings in monolithic applications. 
+
+Following on from that it is envisioned that another branch of research could focus on the impact, or lack thereof, the application architecture can have on the presence of bugs, and the ratio of bug vs. non-bug development, between microservice and monolith architectures. The underlying principle is that while the model can be proven out in any architecture a link between the model's performance and the application architecture has yet to be established.
+
+The factors that were not taken into the account as part of the current analysis could also be investigated as contributing factors. One such option is to investigate if the language the underlying application is developed in has any bearing on the presence of bugs. 
+
+Furthermore, the microservice application currently under analysis was written in only 2 software programming languages. It would be worthwhile to establish if microservice applications written in many different languages had any bearing on the first, the number of bugs present and secondly, on the bug prediction model. It is envisioned that providing the same kind of multilingual analysis would not be  feasible for monolithic applications, however, there is sufficient room to refute any such arguments as well.

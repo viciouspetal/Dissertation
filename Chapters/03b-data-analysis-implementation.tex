@@ -79,27 +79,26 @@ uncovered\_lines & 637 \\ \bottomrule
 \FloatBarrier
 
 \subsubsection{Determining class balance} \label{sec:impl-data-analysis:class-balance}
-Once the data has been cleaned and all missing values were filled, the next step was to determine the balance between values for the target class \isBug{}. It has been determined that the number of bug records was, 742, or approximately 12.15\% whereas non-bug records comprised of 5367, or approximately 87.85\%. As such the bug class was severely undersampled. Class balance has been conducted by checking how many rows in the dataset have had \texttt{True} value in the \isBug{} feature and how many were associated with \texttt{False} value, as per code snippet \ref{code:class-balance-impl}. The reasoning behind not just subtracting the number of \texttt{True} labels from the total row count of the dataset was to catch any rows that had neither label associated with them. 
+Once the data has been cleaned and all missing values were filled, the next step was to determine the balance between values for the target class \isBug{}. It has been determined that the number of bug records was, 742, or approximately 12.15\% whereas non-bug records comprised of 5367, or approximately 87.85\%. As such the bug class was severely undersampled. Class balance has been conducted by checking how many rows in the dataset have had \texttt{True} value in the \isBug{} feature and how many were associated with \texttt{False} value. The reasoning behind not just subtracting the number of \texttt{True} labels from the total row count of the dataset were to catch any rows that had neither label associated with them. 
 
 Given the steps undertaken it has been proven beyond doubt that all data samples have a value for \isBug{} feature, with data points categorized as \texttt{bug} being severely undersampled.
 
 \subsubsection{Resampling the classes}\label{sec:impl-data-analysis:resampling}
-Upsampling and downsampling techniques have both been investigated and implemented as part of the analysis. The downsampling method will randomly remove records from majority class while the upsampling method will randomly duplicate minority class records in order to reach balance between classes in the prediction target feature \isBug{}. 
+Upsampling and downsampling techniques have both been investigated and implemented as part of the analysis. The downsampling method will randomly remove records from the majority class while the upsampling method will randomly duplicate minority class records in order to reach a balance between classes in the prediction target feature \isBug{}. 
 
-In order for the process to be implemented first the determination into which class is in the majority and which in the minority had to be conducted. It has been implemented similarly to checking the class balance from code excerpt \ref{code:class-balance-impl}, however, instead of collecting values into lists by their indices, they are separated into 2 data frames, one for \texttt{True} and one for \texttt{False} classes. Then a determination into which of these data frames will be treated as majority and which is the representation of the minority class. At the end of the process data frames representing same are returned from the function for further processing, with complete code definition being available in excerpt \ref{code:class-separation-impl}
+In order for the process to be implemented first the determination into which class is in the majority and which is the minority had to be conducted. It has been implemented similarly to checking the class balance, however, instead of collecting values into lists by their indices, they are separated into 2 data frames, one for \texttt{True} and one for \texttt{False} classes. Then a determination into which of these data frames will be treated as majority and which is the representation of the minority class. At the end of the process data frames representing same is returned from the function for further processing.
 
 Subsequently, the resampling of either class is conducted via \texttt{resample} function provided by sci-kit learn package. Said function takes in the following parameters:
 \begin{itemize}
-    \item data frame to be resampled. In case of upsampling it is the dataframe containing all of the the minority class records and in case of downsampling it is the dataframe representing the majority class.
+    \item data frame to be resampled. In the case of upsampling, it is the data frame containing all of the minority class records and in case of downsampling, it is the data frame representing the majority class.
     \item replace parameter takes in a boolean value. It is set to \texttt{True} for upsampling operation and \texttt{False} for the downsampling
-    \item the number of records the minority or majority class needs to be resampled to. In case of psamplng this will be the number of records contained in the majority class and in case of downsampling it will match the number of records in the minority class dataframe
+    \item the number of records the minority or majority class needs to be resampled to. In case of sampling, this will be the number of records contained in the majority class and in case of downsampling it will match the number of records in the minority class data frame
     \item random state parameter - given that resampling operation is random by nature, the records are either randomly duplicated, upsampling, or deleted, downsampling, there is a need to ensure the same results between different executions of the complete analysis. That consistency is secured by providing the same number to the \texttt{random\_state} parameter. The value of the parameter is irrelevant, as long as it is provided.
 \end{itemize}
 
-In the last step dataframes representing the majority and minority, now resampled, are combined into to forma single dataframe representing the dataset and returned for further analysis.
+In the last step data frames representing the majority and minority, now resampled, are combined into to form a single data frame representing the dataset and returned for further analysis.
 
-
-For complete source code listing refer to sample \ref{code:resampling-impl}.
+\textbf{As a result of the resampling}, of the original data sample 2 datasets have been created. The upsampled dataset with 10734 of records and a downsampled dataset containing 1484 records.
 
 \subsubsection{Data Correlation}\label{sec:impl-data-analysis:corr:generic-approach}
 The following section will focus on identifying data correlation between features present in the dataset. The methods employed will be both numerical and visual. A numerical method has been employed for brevity and as verification for the visual method as it believed that with 40+ features it will be quite cumbersome to distinguish between high and low correlation values in a matrix.
@@ -127,7 +126,7 @@ Therefore the most approach decided on was to split the correlation heatmap into
 
 Each heatmap was generated using the same implementation, as per code snippet \ref{code:corr-heatmap-impl} utilizing output of correlation function provided by Pandas DataFrame via \texttt{df.corr()} function. Said function provides a numerical metric of correlation between the attributes provided in the data frame. Should the value be positive then a positive correlation is present, meaning that an increase in one value will result in an increase, not necessarily of the same magnitude, in the corresponding metric. The opposite is true for metrics where the correlation factor is negative. The absolute value of the correlation factor represents the strength of the correlation with the greater value indicating a stronger relationship. Correlation factor near 0 is indicative of independence between attributes.
 
-Each scatter plot between a pair of attributes has been implemented using code snippet \ref{code:line-scatter-plot-impl}, where the $x$ and $y$ parameters refer to feature names and \texttt{data} parameter is supplied with the dataframe representing the complete dataset.
+Each scatter-plot between a pair of attributes has been implemented using code snippet \ref{code:line-scatter-plot-impl}, where the $x$ and $y$ parameters refer to feature names and \texttt{data} parameter is supplied with the data frame representing the complete dataset.
 
 \begin{code}
 \captionof{listing}{Scatter Plot Between 2 Features - Implementation}

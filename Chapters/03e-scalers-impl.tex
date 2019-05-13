@@ -5,21 +5,21 @@ The first method utilized was using natural logarithm $log(e)$, which was conduc
 \paragraph{$log(e)$ - Determining which columns to scale}
 First, the dataset was copied in order to avoid polluting the original dataset. Then in order to ensure that all values are on approximately the same scale a list of columns where column variance was above the third quartile of the overall variance values was compiled. 
 
-The third quartile for the variance of the dataset was calculated by first finding variance for each column, using \texttt{var()} function available on DataFrame all objects. The resulting dataseries, with its rows corresponding to the variance value of a given feature and a single column where actual value is contained, was converted to a data frame and passed to the \texttt{collect\_outlier\_data\_to\_list} function. Said function is responsible for calculating the following metrics for a given set of data provided to it:
+The third quartile for the variance of the dataset was calculated by first finding variance for each column, using \texttt{var()} function available on DataFrame all objects. The resulting data series, with its rows corresponding to the variance value of a given feature and a single column where the actual value is contained, was converted to a data frame and passed to the \texttt{collect\_outlier\_data\_to\_list} function. Said function is responsible for calculating the following metrics for a given set of data provided to it:
 %column': column, 'q1': q1, 'q3': q3, 'iqr': iqr, 'lw': lw, 'uw': uw
 \begin{itemize}
     \item first quartile (Q1)
     \item third quartile (Q3)
-    \item inter quartile range (IQR)
-    \item lower outlier boundary - value below which a data point will be considered an outlier. Set to $1.5x IQR$ below first quartile
+    \item interquartile range (IQR)
+    \item lower outlier boundary - value below which a data point will be considered an outlier. Set to $1.5x IQR$ below the first quartile
     \item upper outlier boundary - value above which a data point will be considered an outlier. Set to $1.5x IQR$ above third quartile
 \end{itemize}
 
-As a result of the call the Q3 for the complete variance was calculated and returned for use in the next step.
+As a result of the call, the Q3 for the complete variance was calculated and returned for use in the next step.
 
 Given the dataset Q3 value determined, it was possible to iterate over the complete dataset, column by column, verifying that a given column contains only numeric type data, and finally checking if the variance of the feature is above the Q3 threshold specified. If it was, such column was appended to a list, which when iteration was complete was returned. 
 
-The names of columns gathered as a result are presented in Table \ref{tbl:available-data-non-repeating-types}.
+The names of columns gathered, as a result, are presented in Table \ref{tbl:available-data-non-repeating-types}.
 
 \begin{table}[!h]
 \centering
@@ -102,12 +102,12 @@ Text columns dropped are pertaining to:
 
 All of the above have been retained in the dataset only for verification purposes to make sure that any transformed data point can be traced back to its original state.
 
-Subsequently all scalers are executed in the order of appearance defined in \ref{sec:scalers:initial-setup} are created, fitted to the upsampled and downsampled datasets and finally the results are saved in the storage objects.
+Subsequently, all scalers are executed in the order of appearance defined in \ref{sec:scalers:initial-setup} are created, fitted to the upsampled and downsampled datasets and finally the results are saved in the storage objects.
 
 \paragraph{Comparing variance change per scaling method}
-Following the execution of all scaling methods it became necessary to verify that applying different scalers had any effect and investigate what that effect was, if any.
+Following the execution of all scaling methods, it became necessary to verify that applying different scalers had any effect and investigate what that effect was if any.
 
-The verification, which is the focus of the underlying section, started with calculating the mean and the median of the standard distribution for each of the scaling methods, per dataset. The results presented in Table \ref{tbl:scalers:mean-and-median-sigma}. It can be clearly observed from there that the standard distribution for  the uncaled data, and conversely the variance, is highly skewed with its mean for $\sigma$ being approximately 40 times larger than the median. This trend is observed regardless of the resampling method taken to generate the dataset as it appears in both the upsampled and downsampled datasets. At the same time the mean and median of standard deviation for any of the scaled dataset are very closely positioned indicating more even distribution of variance across the data points.
+The verification, which is the focus of the underlying section, started with calculating the mean and the median of the standard distribution for each of the scaling methods, per dataset. The results presented in Table \ref{tbl:scalers:mean-and-median-sigma}. It can be clearly observed from there that the standard distribution for the unscaled data, and conversely the variance, is highly skewed with its mean for $\sigma$ being approximately 40 times larger than the median. This trend is observed regardless of the resampling method taken to generate the dataset as it appears in both the upsampled and downsampled datasets. At the same time, the mean and median of standard deviation for any of the scaled dataset are very closely positioned indicating more even distribution of variance across the data points.
 
 \begin{table}[!h]
 \centering
@@ -126,11 +126,11 @@ Standard & 3792.15 & 521.95 & 3794.47 & 524.13 \\
 \end{tabular}
 \end{table}
 
-Variance data for all scaling methods have been compiled into a single dataset for easy manipulation and visualization. In the below Table \ref{tbl:scalers:summary-variance-per-scaler} it can be observed that in case of the dataset in question applying any scaling method decreased data variance metric significantly.
+Variance data for all scaling methods have been compiled into a single dataset for easy manipulation and visualization. In the below Table \ref{tbl:scalers:summary-variance-per-scaler} it can be observed that in the case of the dataset in question applying any scaling method decreased data variance metric significantly.
 
-However, the Table \ref{tbl:scalers:summary-variance-per-scaler} fails to intuitively illustrate the distribution of said variance across scalers applied. To do better demonstrate that point a number of bar plots have been generated depicting the variance per column, per each scaler for both upsampled and downsampled datasets. 
+However, Table \ref{tbl:scalers:summary-variance-per-scaler} fails to intuitively illustrate the distribution of said variance across scalers applied. To do better demonstrate that point a number of bar plots have been generated depicting the variance per column, per each scaler for both upsampled and downsampled datasets. 
 
-It should be noted that only a subset of graph will be presented as there are significant similarities shown between some methods, with min-max and max-abs scalers producing almost the same looking variance plots, both quantile scalers as well as standard, or Z-score, scaler also producing extremely similar graphs.
+It should be noted that only a subset of the graph will be presented as there are significant similarities shown between some methods, with min-max and max-abs scalers producing almost the same looking variance plots, both quantile scalers as well as standard, or Z-score, scaler also producing extremely similar graphs.
 
 Furthermore, when visualizing variance, as per implementation listed in code snippet \ref{code:charting-variance-post-resample}, the \fileAgeInSec{} feature has been removed as its extreme value was overshadowing all other variance metrics making them appear the same in magnitude. 
 
@@ -210,7 +210,7 @@ Figures \ref{fig:scalers:variance-min-max-downsample}, \ref{fig:scalers:variance
 \paragraph{Residuals in scaled datasets}\label{sec:scalers:outliers}
 Similarly to the residual value analysis conducted in section \ref{sec:impl-data-analysis:outliers} this section will establish if any residuals have been removed due to the scaling of the data. 
 
-Given the definitions of scalers used, as discussed in section \ref{sec:data-modelling:scalers} it is assumed that the exactly same amount of residuals to that displayed in section \ref{sec:impl-data-analysis:outliers} will be present. 
+Given the definitions of scalers used, as discussed in section \ref{sec:data-modelling:scalers} it is assumed that the exact same amount of residuals to that displayed in section \ref{sec:impl-data-analysis:outliers} will be present. 
 
 To that effect, metrics describing residual values, as described in section \ref{sec:impl-data-analysis:outliers}, has again been compiled, this time for each dataset generated by a scaler, for both upsampled and downsampled datasets.
 
