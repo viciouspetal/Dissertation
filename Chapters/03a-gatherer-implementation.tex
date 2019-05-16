@@ -1,5 +1,5 @@
 \subsection{Data Gatherer}\label{sec:impl-data-gatherer}
-The data gatherer tool has been split into a number of files for readability and maintenance. Additionally, a significant portion of the code written has been tested with automated tests to ensure the quality of the solution. Project structure is initially split between source code and test code folders, named \texttt{src} and \texttt{test} respectively. In each, a number of resource files have been defined to support the program execution, mock server responses, and data or provide additional information.
+The data gatherer tool has been split into a number of files for readability and maintenance. Additionally, a significant portion of the code written has been tested with automated tests to ensure the quality of the solution. Project structure is initially split between source code and test code folders, named \texttt{src} and \texttt{test} respectively. In each, a number of resource files have been defined to support the program execution, approximate live server responses or to provide additional information.
 
 \begin{figure}[!h]
     \centering
@@ -8,7 +8,7 @@ The data gatherer tool has been split into a number of files for readability and
     \label{fig:impl-data-gatherer-source-files}
 \end{figure}
 
-The source folder structure has been illustrated in Figure \ref{fig:impl-data-gatherer-source-files} and it is comprised of the following elements:
+The source folder structure has been illustrated in Figure \ref{fig:impl-data-gatherer-source-files} and it is comprised of the following main elements:
 \begin{enumerate}
     \item \texttt{gatherer\_main.py} - coordinates all data gathering operations. 
     \item\label{lst:impl.item:jira} \texttt{jira\_connector.py} - Handles all communication and authentication with a given JIRA server.
@@ -43,13 +43,13 @@ The order of events is as follows:
 
 Then, the list of JIRA keys pertaining to the non-bug tickets is loaded into the main component and all of the steps listed above are executed again and all of the information gathered is appended to the CSV representing the final dataset.
 
-It should be noted, that should an error occur at any stage of the execution, it is logged for review. Should an error occur while processing any of the individual files, information about such event, be it in the main component or any of the connectors, is also logged for later review.
+It should be noted, that in an occurrence of an error, at any stage of the execution, name of the file and project of where it occurred is logged for review. Should an error occur while processing any of the individual files, information about such event, be it in the main component or any of the connectors, is also taken note of.
 
 \subsubsection{JIRA Connector}\label{sec:source-code:jira}
-The very first operation that the JIRA connector class is responsible for is obtaining a list of JIRA keys. Typically composed of 3 to 4 letters, a key is an abbreviation uniquely identifying a given JIRA project. JIRA keys are obtained from a pre-compiled list: the \texttt{bug\_issue\_key\_list.dat} and \texttt{story\_issue\_key\_list.dat} files, where the former contains only keys to Story-type tickets, while the latter to bug-type tickets. 
+The very first operation that the JIRA connector class is responsible for is obtaining a list of JIRA keys. Typically composed of 3 to 4 letters, a key is an abbreviation uniquely identifying a given JIRA project. JIRA keys are obtained from a pre-compiled list: the \texttt{bug\_issue\_key\_list.dat} and \texttt{story\_issue\_key\_list.dat} files, where the former contains only keys to Bug-type tickets, while the latter to Story-type tickets. 
 All of the communication with the JIRA server happens over its publicly available REST API. In order to access it, base URL is required in the form of \mintinline{html}{<server_name>/jira/rest}.
 
-The JIRA connector then interrogates the server by executing \mintinline{html}{/api/2/issue/{jira_key}} in order to obtain an ID attribute for each ticket. The ticket ID is a necessary parameter required in order to obtain the list of files committed under each ticket.
+Following obtaining of a key the JIRA connector then interrogates the server by executing \mintinline{html}{/api/2/issue/{jira_key}} in order to obtain an ID attribute for each ticket. The ticket ID is a necessary parameter required in order to obtain the list of files committed under each ticket.
 
 In the next step, a list of commits for a given JIRA ID is obtained for all code repositories from the \mintinline{html}{/dev-status/1.0/issue/detail?issueId={jira_id}} URL. The server response is in JSON format and as Figure \ref{fig:source-code:jira:commit-response} illustrates it is possible for any given commit to include multiple files, per repository. Additionally, many commits can be made under the same ticket, under many repositories. Based on Figure \ref{fig:source-code:jira:commit-response}, it should be assumed that the all of the next steps are executed for all files, under any commit in any repository provided by the above REST call.
 \begin{figure}[!h]
@@ -60,7 +60,7 @@ In the next step, a list of commits for a given JIRA ID is obtained for all code
     
 \end{figure}
     
-At this step, a number of infrastructure repositories that are maintenance-only, or ones that are written in languages not supported by Sonar server, thus making it impossible to obtain code quality metrics, have been removed. The repository names to be excluded are matched by a regular expression, from a list of static names compiled based on the domain knowledge of the infrastructure present at the business site. The repositories in question were mainly related to testing framework setup and maintenance, deployment pipelines for specific products and applications present at the business site or automated tests, etc. The list is not provided as it includes product names and it has been considered sensitive by the business owners.
+At this step, a number of infrastructure repositories that are maintenance-only, or ones that are written in languages not supported by Sonar server, thus making it impossible to obtain code quality metrics, have been removed. The repository names to be excluded are matched by a regular expression, from a list of static names compiled based on the domain knowledge of the infrastructure present at the business site. The repositories in question were mainly related to testing framework setup and maintenance, deployment pipelines for specific products and applications present at the business site or automated tests, etc. The list is not explicitly provided as it includes product names and it had been considered sensitive by the business owners.
     
 In the next step, all merge commits are being removed from the analysis as it would otherwise create duplicate data points. For detailed explanation refer to Section \ref{sec:design}. 
 
@@ -132,18 +132,18 @@ The response is given in JSON format and as per Figure \ref{fig:source-code:bitb
 \begin{figure}[!h]
     \centering
     \includegraphics[scale=0.7]{Figures/gatherer/bitbucket_commit_details.PNG}
-    \caption{Caption}
+    \caption{Author and Previous Author Information Provided by Bitbucket}
     \label{fig:source-code:bitbucket-prev-commit-response}
 \end{figure}
 
-As previously described in Section \ref{sec:design}, List \ref{lst:design:info-from-bitbucket} the details listed in Figure \ref{fig:source-code:bitbucket-prev-commit-response} will be used in subsequent analysis steps to provide an indication of developers' level of experience based on seniority as well as familiarity with a given product based on the amount of time spent on the project.
+% As previously described in Section \ref{sec:design}, List \ref{lst:design:info-from-bitbucket} the details listed in Figure \ref{fig:source-code:bitbucket-prev-commit-response} will be used in subsequent analysis steps to provide an indication of developers' level of experience based on seniority as well as familiarity with a given product based on the amount of time spent on the project.
     
 In the final step above details, are compiled into a map of arrays, with the given file name as a key and author and timestamp details as properties inside the array object. The compiled data is then returned to the coordinator script for further processing.
  
 \subsubsection{Sonar Metrics Gatherer}\label{sec:source-code:sonar-metrics}
 Using data gathered from JIRA and Bitbucket in sections \ref{sec:source-code:jira} and \ref{sec:source-code:bitbucket} Sonar server is contacted for each and every file, for each and every commit under each JIRA ticket. 
 
-In order to retrieve any metrics from the Sonar server first, a property called a key needs to be obtained. Initially it was attempted to dynamically generate the project key from data already at hand, however, Sonar server doesn't display any easily identifiable pattern in generating its project keys. Instead, a call to, a now deprecated but still functioning REST endpoint, has been made over the publicly available API. 
+In order to retrieve any metrics from the Sonar server first, a property referred to as the "project key" needs to be obtained. Initially it was attempted to dynamically generate the project key from data already at hand, however, Sonar server does not display any easily identifiable pattern in generating its project keys. Instead, a call to, a now deprecated but still functioning REST endpoint, has been made over the publicly available API. 
 The call is always made to \mintinline[breaklines]{html}{<server_name>/api/projects/index?search=<project_name> \%20<default_branch>}, and while the "server\_name" and "project\_name" properties are easily obtainable and static in nature, the "default\_branch" property can be different per project basis and depends solely on the setup of a given Bitbucket repository. Currently, in the gathered data only 2 default branches have been detected: "develop" and "master", however, there is a possibility that additional branch names could be present in different data. In general, "master" branch has been used in JavaScript projects and "develop" has been used as a default for Java and Kotlin based repositories. However, given that this is just an observation and it does not carry 100\% certainty, for each project key to be retrieved using above endpoint, both eventualities had to be checked. 
 
 Curiously, the response, in this case, was returned in XML format and not JSON, which meant that an additional method of parsing out the data had to be devised. 
@@ -164,7 +164,7 @@ The final step executed by Sonar gatherer class is to obtain the code quality me
 
 To start with, a target URL is composed of Sonar server address, component key and a comma-separated list of metrics to be obtained. As part of that operation, a specified list of code quality metrics is retrieved. The list is defined in \texttt{sonar\_metrics\_enum.py} and it is comprised of 66 different values, 7 of which are not representing Sonar metrics, but information gathered from other sources, i.e. author, timestamp, etc. 
 
-The response from the Sonar server, this time in JSON format, is parsed and sorted. It should be noted, and it will be discussed in due course, that not all metrics are obtainable for every file gathered. In the instance that a metric is missing, the empty value is replaced with $-1$ as this value, as opposed to $0$ is not a legal value for any code quality metrics. 
+The response from the Sonar server, this time in JSON format, is parsed and sorted. It should be noted, and it will be discussed in due course, that not all metrics are obtainable for every file gathered. In the event of a metric being missing, the empty value is replaced with $-1$. The $-1$ value has been chosen, as opposed to $0$, as it is not a legal value for any code quality metrics. 
 
 One thing of note is that for different source code languages different metrics, especially with regards to the code coverage metrics can be provided by Sonar. For example, for JavaScript-based languages such as Angular JS, there is a separate position for integration, or IT, coverage, whereas for Java and other JVM based languages that metric is rarely provided. In JVM based languages it has been folded into the \texttt{overall code coverage} metric instead.
 

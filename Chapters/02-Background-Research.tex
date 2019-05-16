@@ -4,7 +4,7 @@ Building upon the definition by Dragoni et al \cite{dragoniOnMs} and Adrian Cock
 
 A software bug can be described as the occurrence of a fault in a software system which causes the software's behaviour not match up with its specification\cite{predicting-severity-of-a-bug}.
   
-In any software product, regardless of its architecture or deployment principles, code defects also referred to as bugs, will inevitably occur. It has been previously stipulated that testing can take up to 50\% of a software project's resources as well as time. Additionally, it has been stated that in the US alone 20 billion of US \$ could have been saved if better software testing has been conducted prior to any software release \cite{auto-bug-fixing}, emphasizing the importance of adequate software testing first and competent bug detection second.
+In any software product, regardless of its architecture or deployment principles, code defects also referred to as bugs, will inevitably occur. It has been previously stipulated that testing can take up to 50\% of a software project's resources as well as time. Additionally, it has been stated that in the United States of America alone 20 billion of US \$ could have been saved if better software testing has been conducted prior to any software release \cite{auto-bug-fixing}, emphasizing the importance of adequate software testing first and competent bug detection second.
 
 Currently, bug detection is still primarily a human-driven process carried out by a mixture of manual and automated tests in the hope of identifying bugs as much as in verifying that the tested parts of the larger system are behaving correctly. 
 In the context of distributed systems, such as applications written using the microservice architecture paradigm, it is important to realize that testing should cover both the individual microservices as well as the entirety of the system.
@@ -20,26 +20,25 @@ Given the above scenario as well as previous research outlined\cite{bugDetection
 
 Furthermore, taking into the account that it is estimated that software maintenance takes up as much as two-thirds of a software's life cycle\cite{duplicateBugDetection} with some studies raising that number to approximately 90\%\cite{reopenedBugsAndMaintenence}, bug detection becomes imperative and it should be any organization's priority to attempt to detect bugs as early as possible, the earliest possible being, during a given feature's development before it's been released. However, the rise of Continuous Deployment practices, stating that each piece of software integrated with main product code base has to be automatically released into production environment complicates the landscape as the codebase of any component and conversely, the bug count has potential to change rapidly even during a single day.
 
-Previous research suggests that it is possible to predict an occurrence of bugs using currently known Machine Learning algorithms\cite{autoDetectionOfPerfBugs}, however, the parameters used for building prediction model in the cited research is different than ones propose below. Furthermore, the effect, if any, of the software architecture, or the deployment process implemented in the system has not been represented in any previous research encountered. It is also relevant to point out that Tsakiltsidis et all\cite{autoDetectionOfPerfBugs} narrowed down the focus of their research solely to the detection of performance bugs while no such restrictions are enforced in this proposal.
+Previous research suggests that it is possible to predict an occurrence of bugs using currently known Machine Learning algorithms\cite{autoDetectionOfPerfBugs}, however, the parameters used for building prediction model in the cited research is different than ones proposed below. Furthermore, the effect, if any, of the software architecture, or the deployment process implemented in the system has not been represented in any previous research encountered. It is also relevant to point out that Tsakiltsidis et all\cite{autoDetectionOfPerfBugs} narrowed down the focus of their research solely to the detection of performance bugs while no such restrictions are enforced in the underlying analysis.
 
 In this research, the focus will be placed on the broader scope as well as a different set of parameters to build a prediction model: 
 \begin{enumerate}
 \item amount of existing tech debt
 \item amount or lack of code coverage
-\item level or code coverage present (unit, integration within a given application module, integration between modules)
+\item level of code coverage present (unit, integration within a given application module, integration between modules)
 \item level of code duplication
-\item number of code deploys per a given period (hour, day, week, etc)
-\item application architecture
-\item deployment strategy, continuous vs manual
+% \item number of code deploys per a given period (hour, day, week, etc)
+% \item application architecture
+% \item deployment strategy, continuous vs manual
 \end{enumerate}
-The aim is for the prediction metrics to be obtained from static code analysis tools making it suitable for the larger code bases and systems by mitigating the necessity to build large test environments to perform code execution to obtain results. As previously established, the bigger the system, distributed or not, the longer it would take to test its integration, however, static code analysis does not suffer from the combinatorial compounding of the test scenarios available as it doesn't execute any code as part of its operation.
+The aim is for the prediction metrics to be obtained from static code analysis tools making it suitable for the larger code bases and systems by mitigating the necessity to build large test environments to perform code execution in order to to obtain results. As previously established, the bigger the system, distributed or not, the longer it would take to test its integration, however, static code analysis does not suffer from the combinatorial compounding of the test scenarios available as it does not execute any code as part of its operation.
 
-Above is not a definitive list and it is probable that as research progresses it may grow to include additional factors should they enhance the accuracy of the prediction model. It remains to be established if any of the below factors have any effect on the bug prediction accuracy:
+It remains to be established if any of the below factors have any effect on the bug prediction accuracy:
 \begin{enumerate}
 \item application language
 \item presence of peer reviews of the code to be integrated
 \item development style utilized, e.g. single programmer vs. pair-programming
 \item channel of communication between system components
-\item \label{fileAge} time lapsed since last file modification
 \item \label{developerMastery}level of developer's experience with a given application
 \end{enumerate}

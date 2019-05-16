@@ -19,7 +19,7 @@ As a result of the call, the Q3 for the complete variance was calculated and ret
 
 Given the dataset Q3 value determined, it was possible to iterate over the complete dataset, column by column, verifying that a given column contains only numeric type data, and finally checking if the variance of the feature is above the Q3 threshold specified. If it was, such column was appended to a list, which when iteration was complete was returned. 
 
-The names of columns gathered, as a result, are presented in Table \ref{tbl:available-data-non-repeating-types}.
+The names of columns gathered as a result are presented in Table \ref{tbl:available-data-non-repeating-types}.
 
 \begin{table}[!h]
 \centering
@@ -72,7 +72,7 @@ The following scaling methods will be applied sequentially to all data points su
     \item Min Max, described in section \ref{sec:data-modelling:scalers:min-max}
     \item Max Abs - corresponds to Decimal Scaling method, section \ref{sec:data-modelling:scalers:max-abs}
     \item Standard, corresponds to Z-Score method, section \ref{sec:data-modelling:scalers:standard}
-    \item Power Transformer using Yeo-Johnson method, section\ref{sec:data-modelling:scalers:power-yeo-johnson}
+    \item Power Transformer using Yeo-Johnson method, section \ref{sec:data-modelling:scalers:power-yeo-johnson}
     \item Quantile Normal, section \ref{sec:data-modelling:scalers:quantile}
     \item Quantile Uniform, section \ref{sec:data-modelling:scalers:quantile}
 \end{itemize}
@@ -82,14 +82,15 @@ Data frames containing scaled data will be compiled into a reference map for eas
 Following scaled data collection, the standard deviation for each column for each of the methods will be compared to check the data distribution. Decided on a numerical method as compiling graphs for all of 6 scaling methods times 41 features would be inefficient. Graphs may be compiled for illustrating some of the distribution improvements.
 
 Finally, each scaled dataset will be used in Logistic Regression and Decision Tree Algorithm for analysis.
+
 \paragraph{Initial Setup}\label{sec:scalers:initial-setup}
 The data scaling operation began by compiling a number of constants holding the designators for each of the methods listed in \ref{lst:list-of-scalers}, the order in which those scaling methods will be executed as well as permanent storage for holding the result of scaling operation on the upsampled and the downsampled datasets.
 The order of execution was as follows: min max, decimal scaling, Z-score, Power transformer using Yeo-Johnson method, quantile scaling using normal distribution and lastly quantile scaling using uniform distribution variant.
 
-The last step in the initial setup is to save a copy of the original, unscaled upsampled and downsampled datasets, in their respective storage objects. It is necessary for enabling easy comparison of results in due course of the analysis.
+The last step in the initial setup is to save a copy of the original, unscaled upsampled and downsampled datasets, in their respective storage objects. It is a necessary step in enabling easy comparison of results in due course of the analysis.
 
 \paragraph{Executing Scalers}
-Executing and fitting all scalers to the dataset provided. Target column and well as text data columns have been dropped from scaling analysis.
+Executing and fitting all scalers to the dataset provided has been carried out. However, since scaling methods only apply to the numeric columns, the target column and well as text data columns have been dropped from the scaling operation.
 
 Text columns dropped are pertaining to:
 \begin{itemize}
@@ -102,10 +103,10 @@ Text columns dropped are pertaining to:
 
 All of the above have been retained in the dataset only for verification purposes to make sure that any transformed data point can be traced back to its original state.
 
-Subsequently, all scalers are executed in the order of appearance defined in \ref{sec:scalers:initial-setup} are created, fitted to the upsampled and downsampled datasets and finally the results are saved in the storage objects.
+Subsequently, all scalers are created in the order of their appearance defined in \ref{sec:scalers:initial-setup}. Then they are subsequently executed and fitted to the upsampled and downsampled datasets after which the results are saved in the storage objects for later processing.
 
 \paragraph{Comparing variance change per scaling method}
-Following the execution of all scaling methods, it became necessary to verify that applying different scalers had any effect and investigate what that effect was if any.
+Following the execution of all scaling methods, it has been deemed necessary to verify if applying various scalers had any effect and investigate what that effect was.
 
 The verification, which is the focus of the underlying section, started with calculating the mean and the median of the standard distribution for each of the scaling methods, per dataset. The results presented in Table \ref{tbl:scalers:mean-and-median-sigma}. It can be clearly observed from there that the standard distribution for the unscaled data, and conversely the variance, is highly skewed with its mean for $\sigma$ being approximately 40 times larger than the median. This trend is observed regardless of the resampling method taken to generate the dataset as it appears in both the upsampled and downsampled datasets. At the same time, the mean and median of standard deviation for any of the scaled dataset are very closely positioned indicating more even distribution of variance across the data points.
 
@@ -128,9 +129,9 @@ Standard & 3792.15 & 521.95 & 3794.47 & 524.13 \\
 
 Variance data for all scaling methods have been compiled into a single dataset for easy manipulation and visualization. In the below Table \ref{tbl:scalers:summary-variance-per-scaler} it can be observed that in the case of the dataset in question applying any scaling method decreased data variance metric significantly.
 
-However, Table \ref{tbl:scalers:summary-variance-per-scaler} fails to intuitively illustrate the distribution of said variance across scalers applied. To do better demonstrate that point a number of bar plots have been generated depicting the variance per column, per each scaler for both upsampled and downsampled datasets. 
+However, Table \ref{tbl:scalers:summary-variance-per-scaler} fails to intuitively illustrate the distribution of said variance across scalers applied. To better demonstrate that point a number of bar plots have been generated depicting the variance per column, per each scaler for both upsampled and downsampled datasets. 
 
-It should be noted that only a subset of the graph will be presented as there are significant similarities shown between some methods, with min-max and max-abs scalers producing almost the same looking variance plots, both quantile scalers as well as standard, or Z-score, scaler also producing extremely similar graphs.
+It should be noted that only a subset of the graph has been presented as significant similarities have been discovered between some methods, with min-max and max-abs scalers producing almost the same looking variance plots, both quantile scalers as well as standard, or Z-score, scaler also producing extremely similar graphs.
 
 Furthermore, when visualizing variance, as per implementation listed in code snippet \ref{code:charting-variance-post-resample}, the \fileAgeInSec{} feature has been removed as its extreme value was overshadowing all other variance metrics making them appear the same in magnitude. 
 

@@ -110,7 +110,7 @@ Given that Task type tickets are not directly linked to the development life cyc
 The second use of the JIRA server was its proprietary integration with the source code repository - Bitbucket, as both tools are offered by the same company, Atlassian. For each of the JIRA tickets there existed a link between a given ticket and source code file changes, or commits, made and persisted in Bitbucket system. 
 Each commit could consist of many files and each source code file could have been committed to multiple times under the umbrella of a single ticket. However, not all commit records under a ticket have been taken into the account - every so-called merge commit have been excluded.
 
-To illustrate what a merge commit is and why it must be excluded \ref{fig:git-branching-merging-and-rebasing} will be used, where blue nodes signify the master or the golden copy of the code, and green and purple identify branches, where feature, bug fix or any other development work is carried out as part of a development lifecycle. At the end of its life, a branch will be integrated into the Master branch, which will generate a merge commit - illustrated by Feature branch. Additionally, it is a normal occurrence to have more than 1 branch created in a given codebase at any given time. If another branch has been created from the master before the Feature code was merged, as per \ref{fig:git-branching-merging-and-rebasing} Bug, and it is actively being developed on past the merge point such branch will have to be rebased. The rebase process will pull in the merge commit created by Feature, however, all source code files listed under merge commit will have already been analyzed under JIRA ticket representing the Feature, therefore should it not be excluded from the further analysis it would have duplicated the effort. Not excluding merge commits also represented significant risk with regards to story vs. bug categorization of source code files committed as Bug might as well have been a bug. In such scenario file committed under the Feature ticked would be categorized as non-bug, as per ticket category, as well as a bug as per category assigned by the second ticket.
+Figure \ref{fig:git-branching-merging-and-rebasing} has been used To illustrate what a merge commit is and why it must be excluded. In the figure the blue nodes signify the Master or the golden copy of the code, whereas green and purple ones identify branches, where feature, bug fix or any other development work is carried out as part of a development lifecycle. At the end of its life, a branch will be integrated into the Master branch, which will generate a merge commit - illustrated by the Feature branch. Additionally, it is a normal occurrence to have more than 1 branch created in a given codebase at any time. If another branch has been created from the Master before the Feature code was merged, as illustrated in Figure \ref{fig:git-branching-merging-and-rebasing} by the purple Bug nodes, and it is actively being developed on past the merge point such branch will have to be rebased. The rebase process will pull in the merge commit created by Feature into the Bug branch, however, all source code files listed under merge commit will have already been analyzed under JIRA ticket representing the Feature. Therefore, it should be excluded from the further analysis as including it would effectively create duplicate records to analyze. Additionally, failure to exclude the merge commits also represented significant risk with regards to story vs. bug categorization of source code files committed as files modified under the Bug ticket might as well have been modified in Feature merge commit. In such scenario file committed under the Feature ticked would be categorized as non-bug, as per ticket category, as well as a bug as per category assigned by the second ticket.
 
 \begin{figure}[!h]
     \centering
@@ -137,7 +137,9 @@ while the Bitbucket server provided additional information about:
 
 The final tool utilized was SonarQube by SonarSource, an open-source platform. Its capabilities include continuous inspection of code quality to perform automatic reviews with static analysis of code to detect code smells, reports on duplicated code, coding standards, unit tests, code coverage, code complexity, comments,  security vulnerabilities, and much more. In the context of this use case it was utilized to associate code metrics listed in Tables \ref{tbl:available-data-above-0-max-100} and \ref{tbl:available-data-above-0-no-max} as well as \files{}, \sqaleDebt{}, \statements{} and \violations{} provided in Table \ref{tbl:available-data-non-repeating-types}.
 
-The \issueKey{}, \sourceRepository{} and \filePath{} were only used to verify that a given data point can be traced to a relevant JIRA ticket in order to verify it belongs to an assigned category, \authorAttrib{} and \prevAuthorAttrib{} were used to populate seniority and project tenure features. Finally, \timestamp{} and \prevTimestamp{} were used to calculate staleness of the file between changes.
+The \issueKey{}, \sourceRepository{} and \filePath{} attributes were only used to verify that a given data point can be traced back to a relevant JIRA ticket in order to ascertain its assigned category. 
+% The \authorAttrib{} and \prevAuthorAttrib{} were used to populate seniority and project tenure features. 
+Finally, \timestamp{} and \prevTimestamp{} were used to calculate staleness of the file between changes.
 
 \subsection{Machine Learning Models Utilized}
 
@@ -186,16 +188,16 @@ From the same definition it can be deducted that impact of \textalpha{} will be 
 \subsubsection{Decision Tree Classifier}
 Decision Tree for classification is a non-parametric method of supervised machine learning. Along with Decision Tree Regression, it was first proposed in 1984\cite{breimanCart1984} and it was intended as a top-down approach applied to a given set of data points. To find solutions a decision tree will make a number of sequential, hierarchical, or top-down, decisions about the outcome variable based on the predictor data. 
 
-A very simplistic decision tree for classification has been represented in Figure \ref{fig:decision-tree-sample}. The tree is built top-down, starting from a root node corresponding to the best predictor for the dataset, which branches would extend downwards from. Going down the tree, depending on the position, the nodes would carry a different meaning. Terminal nodes, coloured in green, are points where no further decisions can be made, are called leaf nodes. The white nodes represent the decision boundary representing the points at which a classification rule, or classifier, is executed. The method serves in creating a consistent and standardized way of predicting what class should be applied to a given data point.
+A very simplistic decision tree for classification has been represented in Figure \ref{fig:decision-tree-sample}. The tree is built top-down, starting from a root node corresponding to the best predictor for the dataset, which branches would extend downwards from. Going down the tree, depending on the position, the nodes would carry a different meaning. Terminal nodes, coloured in green, are points where no further decisions can be made. They are referred to as called leaf nodes. The white nodes represent the decision boundary defining the points at which a classification rule, or classifier, is executed. This method of execution serves in creating a consistent and standardized way of predicting what class should be applied to a given data point as the same rules are applied to any and all available data points.
 
 \begin{figure}[!h]
     \centering
     \includegraphics[scale=0.6]{Figures/decision_tree_sample.png}
-    \caption{Sample Decision Tree Classification}
+    \caption{Sample Decision Tree Classification of Iris Flowers}
     \label{fig:decision-tree-sample}
 \end{figure}
 
-As the generation the tree progresses the classifiers are applied, depending on the features contained in the dataset, and continuously applied to each subset to generate additional nodes iteratively \cite{Bertsimas2017Cart} in each step while at the same time keeping track of the end structure of the tree. To an extent the method could be compared to a flowchart where no feedback loops are allowed, therefore making the model easy to explain as it is relatively easy to visualize the end structure of the tree, subject to the number of prediction-contributing features.
+As the generation the tree progresses the classifiers are applied, depending on the features contained in the dataset, and continuously applied to each subset to generate additional nodes iteratively \cite{Bertsimas2017Cart} in each step while at the same time keeping track of the end structure of the tree. To an extent the method could be compared to a flowchart with a significant distinction - no feedback loops are allowed. Therefore, the model is to some extent easy to explain as it is relatively uncomplicated to visualize the end structure of the tree, subject to the number of prediction-contributing features.
 
 Given the mode of operation, the function implemented is step-wise, not linear, enabling the model to accommodate more complex relationships between the data. 
 Additionally, it makes it less susceptible to the effects of feature collinearity, making it a highly valuable model candidate for datasets with high correlation factor values between features.
@@ -204,7 +206,7 @@ CART models, the decision tree classifier is part of, are models based purely on
 
 \subsection{Data Modelling}
 
-Once a dataset has been generated as per section \ref{sec:design} it underwent the following operations:
+Once a dataset has been generated, as per section \ref{sec:design}, it underwent the following operations:
 \begin{enumerate}\label{lst:dataset-ops}
     \item missing data analysis and data cleaning \label{lst:dataset-ops.item:data-cleaning}
     \item balance of bug to non-bug records in the dataset \label{lst:dataset-ops.item:bug-to-non-bug-balance}
@@ -216,7 +218,6 @@ Once a dataset has been generated as per section \ref{sec:design} it underwent t
     \item distribution of selected features \label{lst:dataset-ops.item:attribute-distribution}
     \item evaluation of regularized Logistic Regression model \label{lst:dataset-ops.item:ml-logistic-regression}
     \item evaluation of Decision Tree Classification model \label{lst:dataset-ops.item:ml-decision-tree}
-    \item evaluation of additional models as necessary \label{lst:dataset-ops.item:ml-models-additional}
 \end{enumerate}
 
 Item \ref{lst:dataset-ops.item:data-cleaning} focuses on cleaning and imputing values for missing metrics. Item \ref{lst:dataset-ops.item:bug-to-non-bug-balance} will focus on listing the ratios between bug and non bug records in the dataset.
@@ -233,7 +234,7 @@ Item \ref{lst:dataset-ops.item:data-scaling} concentrates on evaluating multiple
     \item Quantile Transformation using normal distribution variant
 \end{enumerate}
 
-Finally, an evaluation of the effectiveness of selected machine learning models with regards to predicting bug vs non-bug classes in the dataset will be carried out and constitutes the focus of items \ref{lst:dataset-ops.item:ml-logistic-regression}, \ref{lst:dataset-ops.item:ml-decision-tree} and \ref{lst:dataset-ops.item:ml-models-additional} respectively.
+Finally, an evaluation of the effectiveness of selected machine learning models with regards to predicting bug vs non-bug classes in the dataset has been carried out and constitutes the focus of items \ref{lst:dataset-ops.item:ml-logistic-regression} and \ref{lst:dataset-ops.item:ml-decision-tree} respectively.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Data Normalization methods}\label{sec:data-modelling:scalers}
 \paragraph{Min Max method}\label{sec:data-modelling:scalers:min-max}
@@ -260,7 +261,7 @@ This method standardizes the features by removing the mean and scaling the attri
 \end{equation}
 where $\hat{a}$ represents the transformed value, $\mu(a)$ is the arithmetic mean of a given attribute and $\sigma(a)$ is its standard deviation.
 
-As this method does not rely on knowing the minimum and maximum values ahead of applying the transformation it overcomes the deficiencies of the Min-Max and Decimal Scaling methods\cite{dataNormalization2014}. However, at the same time, it faces difficulties with a non-stationary data series where the mean or standard deviation change over time.
+As this method does not rely on knowing the minimum and maximum values ahead of applying the transformation it overcomes the deficiencies of the Min-Max and Decimal Scaling methods\cite{dataNormalization2014}. However, at the same time, it faces difficulties with a non-stationary data series where the mean or standard deviation change over time. Given that during the underlying analysis the data has been static and not continuously undergoing updates or other modifications it has been deemed an appropriate scaling method to include.
 
 \paragraph{Power Transformation - Yeo-Johnson method} \label{sec:data-modelling:scalers:power-yeo-johnson}
 Power data normalization methods are a family of parametric, monotonic transformations aiming to alter given data from any distribution to as close to a Gaussian distribution as possible. As with any data normalization method, it is performed on data in order to reduce variance and minimize skewness.

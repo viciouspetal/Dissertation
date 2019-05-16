@@ -8,7 +8,7 @@ During the transformation, it has been discovered that in 7 instances the result
 At the end of the transformation \timestamp{} and \prevTimestamp{} columns were removed, changing the shape of the dataset to 66 columns instead of initial 67.
 
 \subsubsection{Files deleted}\label{sec:impl-data-analysis:files-deleted}
-Progressively, an analysis of any missing values from all the columns was conducted. The first step was to determine if any of the files committed to having since been deleted. It has been determined by using the \files column provided by Sonar server. If the value of the column was not equal to 1 then such file no longer existed in the repository, despite the presence of historical code metrics. As a result, 431 rows were removed from the dataset. It should be noted that it doesn't mean that 431 different files were removed from the dataset as any file could have been committed to multiple times as each such commit would be represented by a row in the dataset. The obsolete file removal left the dataset at 6109 rows in 66 columns.
+Progressively, an analysis of any missing values from all the columns was conducted. The first step was to determine if any of the files committed to having since been deleted. It has been determined by using the \files{} column provided by Sonar server. If the value of the column was not equal to 1 then such file no longer existed in the repository, despite the presence of historical code metrics. As a result, 431 rows were removed from the dataset. It should be noted that it doesn't mean that 431 different files were removed from the dataset as any file could have been committed to multiple times as each such commit would be represented by a row in the dataset. The obsolete file removal left the dataset at 6109 rows in 66 columns.
 
 \subsubsection{Columns with all values at 0}\label{sec:impl-data-analysis:all-cols-at-0}
 Next step was to check if there were any features present where all values were at 0 value. It has been determined that a column where all values are of 0 value would not contribute towards the prediction and therefore can be removed. The list of 19 removed columns is presented in Table \ref{tbl:zero-value-columns}. This step left the dataset with 6109 rows and 47 columns.
@@ -101,7 +101,7 @@ In the last step data frames representing the majority and minority, now resampl
 \textbf{As a result of the resampling}, of the original data sample 2 datasets have been created. The upsampled dataset with 10734 of records and a downsampled dataset containing 1484 records.
 
 \subsubsection{Data Correlation}\label{sec:impl-data-analysis:corr:generic-approach}
-The following section will focus on identifying data correlation between features present in the dataset. The methods employed will be both numerical and visual. A numerical method has been employed for brevity and as verification for the visual method as it believed that with 40+ features it will be quite cumbersome to distinguish between high and low correlation values in a matrix.
+The following section will focus on identifying data correlation between features present in the dataset. The methods employed will be both numerical and visual. A numerical method has been employed for brevity and as verification for the visual method as it has been concluded that with 40+ features it would have been quite cumbersome to distinguish between high and low correlation values in the matrix.
 
 \begin{figure}
     \includegraphics[scale=0.5,left]{\figCorrPath/Feature_Correlation_Heatmap.png}
@@ -121,7 +121,7 @@ Therefore the most approach decided on was to split the correlation heatmap into
 \begin{enumerate}
     \item scatter plot depicting the relationship between the candidates
     \item the distribution of values 
-    \item deciding on transformation approach, e.g. deletion, combination, etc
+    \item deciding on transformation approach or lack thereof, e.g. deletion, combination, etc
 \end{enumerate}
 
 Each heatmap was generated using the same implementation, as per code snippet \ref{code:corr-heatmap-impl} utilizing output of correlation function provided by Pandas DataFrame via \texttt{df.corr()} function. Said function provides a numerical metric of correlation between the attributes provided in the data frame. Should the value be positive then a positive correlation is present, meaning that an increase in one value will result in an increase, not necessarily of the same magnitude, in the corresponding metric. The opposite is true for metrics where the correlation factor is negative. The absolute value of the correlation factor represents the strength of the correlation with the greater value indicating a stronger relationship. Correlation factor near 0 is indicative of independence between attributes.
@@ -182,7 +182,7 @@ and it's correlation statistics can be observed in Figure \ref{fig:correlation-c
 \end{figure}
 \FloatBarrier
 
-Based on the scatter plot, generated from using code excerpt \ref{code:feat-transf:scatterplot}, depicted in Figure \ref{fig:candidate1-scatterplot} constructed for the transformation Candidate 1 listed above, it is thought that the attributes have a positive, almost perfectly linear relationship between one another, meaning that as one attribute increases in value so does the corresponding one, furthermore the increase or decrease in value is of the same magnitude.
+Based on the scatter plot, generated from using code excerpt \ref{code:feat-transf:scatterplot}, depicted in Figure \ref{fig:candidate1-scatterplot} constructed for the transformation Candidate 1 listed above, it has been established that the attributes have a positive, almost perfectly linear relationship between one another, meaning that as one attribute increases in value so does the corresponding one, furthermore the increase or decrease in value is of the same magnitude.
 \begin{figure}[!h]
     \centering
     \includegraphics[scale=0.9]{\figCorrPath/Attribute_Relationship_in_Candidate_1.png}
@@ -191,7 +191,7 @@ Based on the scatter plot, generated from using code excerpt \ref{code:feat-tran
 \end{figure}
 
 From the Figure \ref{fig:candidate1-distribution}, implemented by code snippet \ref{code:feat-transf:distribution-multiplot}, it can be surmised that the distribution of values for both attributes is perfectly aligned. To ascertain that claim an individual graph was plotted just for the invisible attribute \overallBranchCoverage{} which can be observed in Figure \ref{fig:candidate1-attrib2-distribution}.
-From the investigation conducted it was deemed fair to conclude that it doesn't matter which attribute is preferred to be retained for Candidate 1 - \overallBranchCoverage{} or \branchCoverage{} as their values were almost identical. Based on the attribute name the column representing the overall coverage was selected to remain while the other was to be removed.
+From the investigation conducted it was deemed fair to conclude that it did not matter which attribute is preferred to be retained for Candidate 1 - \overallBranchCoverage{} or \branchCoverage{} as their values were almost identical. Based on the attribute name the column representing the overall coverage was selected to remain while the other was to be removed.
 
 \begin{landscape}
 \begin{figure}
@@ -220,7 +220,7 @@ Candidate 2 analysis started with the charting of a scatter plot for the selecte
     \label{fig:candidate2-scatterplot}
 \end{figure}
 
-The distribution of the \overallUncoveredLines{} and \uncoveredLines{} is the same as per Figure \ref{fig:candidate2-distribution}. Since it has been previously illustrated that when only 1 graph line is visible it is in fact perfectly overlain over the distribution line for the other attribute in the analysis of Candidate 1, therefore, a special graph depicting the distribution of \uncoveredLines{} will not be provided.
+The distribution of the \overallUncoveredLines{} and \uncoveredLines{} is the same as per Figure \ref{fig:candidate2-distribution}. Since it has been previously illustrated that when only 1 graph line is visible it is in fact perfectly overlain over the distribution line for the other attribute in the analysis of Candidate 1, therefore, a special graph depicting the distribution of \uncoveredLines{} has not been be provided.
 \begin{figure}
     \centering
   \includegraphics[scale=0.7]{\figCorrPath/Attribute_Distribution_in_Candidate_2.png}
@@ -231,7 +231,7 @@ In case of Candidate 2 it  has been decided to retain \overallUncoveredLines{} a
 \FloatBarrier
 
 Given the depiction of both the linear relationship between the multiple  attributes of \overallCoverage{}, \overallLineCoverage{},\coverage{} and \lineCoverage{}, presented in Figure \ref{fig:candidate3-pairplot} and the distribution, provide on the diagonal it was summarily concluded that the attributes follow the same trends and only one of the four should be retained. Therefore, based on previous domain knowledge of the metrics \overallCoverage{} was deemed the most encompassing and has been retained.
-% \todo{the pair plot needs an update of the title as it's not distribution. Plus need to plot distributions as pair plot diagonal is NOT a representation of distribution}
+
 \begin{figure}[!h]
     \centering
     \includegraphics[scale=0.5]{\figCorrPath/Attribute_Relationship_in_Candidate_3.png}
@@ -241,7 +241,7 @@ Given the depiction of both the linear relationship between the multiple  attrib
 
 \FloatBarrier
 
-The last feature transformation will be conducted between \overallUncoveredConditions{} and \uncoveredConditions{} attributes. In Figure \ref{fig:candidate4-scatterplot} it can be observed a perfectly linear relationship between the two attributes under investigation. Additionally, a change in one attribute corresponds directly to an increase of the corresponding attribute not only in the direction of the change but also in the magnitude. Furthermore, from Figure \ref{fig:candidate4-distribution} again a perfectly aligned distribution of both attributes can be observed leading to a conclusion that the attributes under question are equivalent.
+The last feature transformation will be conducted between \overallUncoveredConditions{} and \uncoveredConditions{} attributes. In Figure \ref{fig:candidate4-scatterplot} a perfectly linear relationship between the two attributes under investigation can be observed. Additionally, a change in one attribute corresponds directly to an increase of the corresponding attribute not only in the direction of the change but also in the magnitude. Furthermore, from Figure \ref{fig:candidate4-distribution} again a perfectly aligned distribution of both attributes can be observed leading to a conclusion that the attributes under question are equivalent.
 
 \begin{figure}[!h]
     \centering
@@ -268,8 +268,10 @@ The last feature transformation will be conducted between \overallUncoveredCondi
     \item \overallUncoveredConditions{}
 \end{itemize}
 
+The remaining attributes have been removed from the data frame and conversely, any further analysis.
+
 \paragraph{Line and complexity features}\label{sec:impl-data-analysis:corr:line-and-complexity}
-In the following section, a number off attributes will be investigated with regards to the possibility of transforming said features and reducing the dimensionality of the overall dataset. Given a subplot of a heatmap presented in Figure \ref{fig:correlation-line-metrics-subplot} the attributes under analysis are, based on their high correlation:
+In the following section, a number off attributes has been investigated with regards to the possibility of transforming said features and reducing the dimensionality of the overall dataset. Given a subplot of a heatmap presented in Figure \ref{fig:correlation-line-metrics-subplot} the attributes under analysis are, based on their high correlation:
 \resume{enumerate}
     \item \complexity{}, \fileComplexity{}    \item \statements{}, \linesToCover{}
     \item \ncloc{}, \lines{}
@@ -317,7 +319,7 @@ For Candidate 6, \statements{} and \linesToCover{}, displayed in Figure \ref{fig
     \label{fig:candidate6-distribution}
 \end{figure}
 
-In the next feature transformation candidate, numbered seventh, the relationship between \ncloc{} and \lines{} attributes is again quite linear, as per Figure \ref{fig:candidate7-scatterplot}. From the distribution of the attributes, displayed in Figure \ref{fig:candidate7-distribution} it can be concluded that they follow the distinctly similar pattern.
+In the next feature transformation candidate, the Candidate 7, the relationship between \ncloc{} and \lines{} attributes is again quite linear, as per Figure \ref{fig:candidate7-scatterplot}. From the distribution of the attributes, displayed in Figure \ref{fig:candidate7-distribution} it can be concluded that they follow the approximately the same pattern.
 
 \begin{figure}
     \centering
@@ -336,7 +338,7 @@ In the next feature transformation candidate, numbered seventh, the relationship
 
 In order to further the analysis of the candidates, given the high correlation between a number of features, a number of three-dimensional plots were developed. They serve to better illustrate the relationship between multiple attributes at a time than multiple two-dimensional plots.
 
-From Figure \ref{fig:3d:ncloc-linesToCover-statements} it can be observed that there is an almost perfect linear relationship between \statements{}, \ncloc{} and \lines{} attributes- and this stands to reason as all three metrics would be used to describe source code, with the distinction of \lines{} attribute covering both comment and source code lines in any file. This relationship can also be viewed in Figure \ref{fig:3d:statements-lines-commentLines}, where it can be observed that the higher the number of lines the higher the number of both \statements{} and \commentLines{}. The divergence of a small portion of \lines{} attribute from the main graph line is attributed to a growing number of comment lines in the code as opposed to source ones, as covered by \statements{}. This divergence points to different regression lines for \lines{} vs\commentLines{} as well as \lines{} and \statements{}, therefore those 3 are not equivalent and will not be folded up into a single metric.
+From Figure \ref{fig:3d:ncloc-linesToCover-statements} it can be observed that there is an almost perfect linear relationship between \statements{}, \ncloc{} and \lines{} attributes - and this stands to reason as all three metrics would be used to describe source code, with the distinction of \lines{} attribute covering both comment and source code lines in any file. This relationship can also be viewed in Figure \ref{fig:3d:statements-lines-commentLines}, where it can be observed that the higher the number of lines the higher the number of both \statements{} and \commentLines{}. The divergence of a small portion of \lines{} attribute from the main graph line is attributed to a growing number of comment lines in the code as opposed to source ones, as covered by \statements{}. This divergence points to different regression lines for \lines{} vs \commentLines{} as well as \lines{} and \statements{}, therefore those 3 are not equivalent and will not be folded up into a single metric.
 \begin{figure}[!h]
     \centering
     \includegraphics[scale=0.65]{Figures/three-d/Correlation-between-attributes-ncloc-lines_to_cover-statements.png}
@@ -361,7 +363,7 @@ However, while the trend is present, those metrics are not equivalent and it has
 \end{figure}
 
 \FloatBarrier
-\textbf{In Conclusion} from the features listed at the beginning of this section it has been sufficiently determined that the following pairs can be safely transformed into a single feature:
+\textbf{In Conclusion} from the features listed at the beginning of this section it has been sufficiently determined that the following pairs can be safely transformed:
 \begin{itemize}
     \item \complexity{} and \fileComplexity{} - linear relationship and similar looking distribution
     \item \statements{} and \linesToCover{} - linear relationship and approximately the same distribution
@@ -385,7 +387,7 @@ The following section will investigate if the following candidates can be transf
     \item \majorViolations{}, \minorViolations{} and \infoViolations{}
 \suspend{enumerate}
 
-Starting with Candidate 8, the relationship between the attributes appears to be a strong linear one, as can be observed in Figure \ref{fig:3d:candidate8-relationship}. Unfortunately, despite the indications of a strong relationship, there aren't enough data points available to prove it beyond any doubt. The distribution graph, in Figure \ref{fig:candidate8-distribution}, however, clearly states that the distribution of whatever little data points that are available matches perfectly between the three attributes.
+Starting with Candidate 8, the relationship between the attributes appears to be strong and a linear one, as can be observed in Figure \ref{fig:3d:candidate8-relationship}. Unfortunately, despite the indications of a strong relationship, there aren't enough data points available to prove it beyond any doubt. The distribution graph, in Figure \ref{fig:candidate8-distribution}, however, clearly states that the distribution of whatever little data points that are available matches perfectly between the three attributes.
 
 \begin{figure}
     \centering
@@ -415,12 +417,12 @@ Starting with Candidate 8, the relationship between the attributes appears to be
     \label{fig:candidate9-distribution}
 \end{figure}
 
-\textbf{In conclusion} the \openIssues{}, \codeSmells{} and \violations{} features can be transformed into a single feature as they show an indication of a linear relationship and have an identical distribution. As such \violations{} feature will be retained while the other 2 will be dropped from the analysis.
+\textbf{In conclusion} the \openIssues{}, \codeSmells{} and \violations{} features can be transformed into a single feature as they show an indication of a linear relationship and have an identical distribution. As such \violations{} feature will be retained while the other two will be dropped from the analysis.
 
 A conclusion with regards to remaining metrics is that no strong opportunity for transformation presented itself as there is little defined relationship between the attributes. Furthermore, based on domain knowledge of \infoViolations{}, \minorViolations{} and \majorViolations{} it is concluded that those metrics are independent of one another. 
 
 However, when drawing from the domain knowledge of Sonar metrics, \violations{} is an all-encompassing term used for describing any infraction against rules defined as part of the analysis, such as that depicted by \infoViolations{}, \minorViolations{} or \majorViolations{}. As such, it is natural that \violations{} attribute will be closely related to those metrics. Therefore, the only violation describing metric retained will be \violations{}.
-% \FloatBarrier
+\FloatBarrier
 
 \paragraph{Code Duplication Metrics}\label{sec:impl-data-analysis:corr:code-duplication}
 
