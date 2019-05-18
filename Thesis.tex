@@ -25,7 +25,7 @@
 \usepackage{textgreek} % support for greek letters
 \usepackage[section]{placeins} % floatbarrier
 \usepackage[export]{adjustbox} % figure placement adjustments
-\usepackage{hyperref} % URL highlights
+% \usepackage{hyperref} % URL highlights
 %\usepackage[colorlinks=true, allcolors=blue]{hyperref} %URL colouring
 \usepackage{mdwlist} % used for customized resuming of numbering on numbered lists
 
@@ -99,7 +99,7 @@
 
 
 
-\hypersetup{urlcolor=black, colorlinks=true}  % Colours hyperlinks in black, can be distracting if there are many links and colored blue.
+% \hypersetup{urlcolor=black, colorlinks=true}  % Colours hyperlinks in black, can be distracting if there are many links and colored blue.
 
 %% ----------------------------------------------------------------
 
@@ -168,14 +168,13 @@ Date:\\
 
 \abstract{
 \addtocontents{toc}{\vspace{1em}}  % Add a gap in the Contents, for aesthetics
-(200 words)
 
-It has been estimated that software maintenance takes up to approximately two-thirds of a software's life cycle, inclucing defect, or bug, detection, investigation and finally resolution. As it currently stands, bug detection is primarily a human-driven process, which by its very definition is prone to human error. The following sections will outline exploration of the possibility of utilizing machine learning algorithms in order to develop a system predicting code defects based on static code analysis metrics. The analysis is geared specifically towards applications developed using microservices architecture and following continuous deployment principles. The motivation to conduct such research is to provide software engineers with a suitable tool for verifying their applications in fast-paced development environments. The focus of the research is directed at microservices and CD practices due to previous research conducted for monolithic architectures following manual deployment process. While the focus of the research will be on proving out prediction model, additionally, the weight of the metrics, such as software's architecture and deployment strategy will also be investigated.
-Completed prediction model would provide a machine-automated approach to bug detection, one providing an additional level of confidence and potentially reducing time to market for products utilizing it.\todo{probably needs a mention of the conclusion as well}
+It has been estimated that software maintenance takes up to approximately two-thirds of a software's life cycle, including defect, or bug, detection, investigation and finally resolution. As it currently stands, bug detection is primarily a human-driven process, which by its very definition is prone to error. The following sections will outline exploration of the possibility of utilizing machine learning algorithms in order to develop a system predicting code defects based on static code analysis metrics. The analysis is geared specifically towards applications developed using microservices architecture and following continuous deployment (CD) principles. The motivation to conduct such research is to provide software engineers with a suitable tool for verifying their applications in fast-paced development environments. The focus of the research will be on proving out the prediction model. It is directed at microservices architecture and CD practices due to previous research conducted for monolithic architectures following manual deployment process. 
+Completed prediction model provides a machine-automated approach to bug detection. The best accuracy of the model achieved is 99\% of correctly predicting presence of a bug. It is a level of accuracy providing an additional level of confidence and potentially reducing time to market for products utilizing it.
 }
-\tableofcontents
+% \tableofcontents
 \clearpage  % Abstract ended, start a new page
-\begin{comment}
+% \begin{comment}
 %% ----------------------------------------------------------------
 
 \setstretch{1.3}  % Reset the line-spacing to 1.3 for body text (if it has changed)
@@ -183,8 +182,9 @@ Completed prediction model would provide a machine-automated approach to bug det
 % The Acknowledgements page, for thanking everyone
 \acknowledgements{
 \addtocontents{toc}{\vspace{1em}}  % Add a gap in the Contents, for aesthetics
+I would like to thank Dr Paul Walsh for his advice, encouragement, and expertise. I would also like to thank my employers at Dell EMC for providing the data necessary to conduct the research.
 
-The acknowledgements and the people to thank go here, don't forget to include your project adviser\ldots
+Finally, I would like to thank my family and partner for being a continued inspiration throughout the research.
 
 }
 \clearpage  % End of the Acknowledgements
@@ -204,6 +204,8 @@ The acknowledgements and the people to thank go here, don't forget to include yo
 %% ----------------------------------------------------------------
 \lhead{\emph{List of Tables}}  % Set the left side page header to "List of Tables"
 \listoftables  % Write out the List of Tables
+\begin{comment}
+
 
 %% ----------------------------------------------------------------
 \setstretch{1.5}  % Set the line spacing to 1.5, this makes the following tables easier to read
