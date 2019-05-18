@@ -1,4 +1,5 @@
 \chapter{Results and Observations}\label{chp:results-and-observations}
+It should be noted that due to the randomness of the resampling and scaling operations it is assumed that the exact same results will not be obtained between subsequent runs of the prediction model. However, the results obtained from multiple runs as part of the research have been of consistent magnitude.
 \section{Logistic Regression Results}\label{sec:results:log-reg}
 % \todo{Need to Speak to why decision tree results were so much better than those of logistic regression}
 % \todo{- What are the results in, F1? TF/TP, RSS?}
@@ -33,9 +34,9 @@ quantile-uniform & 60.9 & 57.1 & 62.5 & 62.5 \\ \hline
 \section{Decision Tree Results}\label{sec:results:decision-tree}
 The results of decision tree classification have been compiled into Table \ref{tbl:results:decision-tree}. From same it can be observed, that similarly to Logistic Regression results in section \ref{sec:results:log-reg}, the upsampled dataset exhibits higher prediction scores. 
 
-As has been the case with the Logistic Regression model, also in the case of Decision Tree Classifier the scoring function is defined as the mean accuracy of correctly predicting the target value ($y$) for a given set of features ($X$). It is again presented as a decimal number in the range of $ 0 to 1$, however, for the purpose of defining it as percentage the scores have been multiplied by $100\%$.
+As has been the case with the Logistic Regression model, also in the case of Decision Tree Classifier the scoring function is defined as the mean accuracy of correctly predicting the target value ($y$) for a given set of features ($X$). It is again presented as a decimal number in the range of $ 0$ to $1$, however, for the purpose of defining it as percentage the scores have been multiplied by $100\%$.
 
-The results of the classification analysis would vary from approximately 86\% to just above 88\% for the downsampled dataset and reaching a staggering approximately 99\% accuracy in the upsampled dataset.
+The results of the classification analysis would vary from approximately 88\% to almost 91\% for the downsampled dataset and reaching a staggering 99\% accuracy in the upsampled dataset.
 \begin{table}[h!]
 \centering
 \caption{Decision Tree Classification Results}
@@ -43,13 +44,13 @@ The results of the classification analysis would vary from approximately 86\% to
 \begin{tabular}{@{}lll@{}}
 \toprule
 Scaler Method Name & Upsampled Score & Downsampled Score \\ \midrule
-unmodified & 99.59 & 85.98 \\
-min-max & 99.25 & 86.79 \\
-max-abs & 99.37 & 88.14 \\
-standard & 99.52 & 87.06 \\
-power-yeo-johnson & 99.74 & 87.6 \\
-quantile-normal & 99.66 & 87.87 \\
-quantile-uniform & 99.37 & 87.6 \\ \bottomrule
+unmodified & 99.55& 89.22  \\
+min-max & 99.07 & 90.57 \\
+max-abs & 99.37 & 87.87 \\
+standard & 99.18 & 88.68 \\
+power-yeo-johnson & 99.37 & 88.68 \\
+quantile-normal & 99.4 & 89.49 \\
+quantile-uniform & 99.55 & 90.84 \\ \bottomrule
 \end{tabular}
 \end{table}
 
