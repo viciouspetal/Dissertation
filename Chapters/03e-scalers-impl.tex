@@ -6,7 +6,7 @@ The first method utilized was using natural logarithm $log(e)$, which was conduc
 First, the dataset was copied in order to avoid polluting the original dataset. Then in order to ensure that all values are on approximately the same scale a list of columns where column variance was above the third quartile of the overall variance values was compiled. 
 
 The third quartile for the variance of the dataset was calculated by first finding variance for each column, using \texttt{var()} function available on DataFrame all objects. The resulting data series, with its rows corresponding to the variance value of a given feature and a single column where the actual value is contained, was converted to a data frame and passed to the \texttt{collect\_outlier\_data\_to\_list} function. Said function is responsible for calculating the following metrics for a given set of data provided to it:
-%column': column, 'q1': q1, 'q3': q3, 'iqr': iqr, 'lw': lw, 'uw': uw
+
 \begin{itemize}
     \item first quartile (Q1)
     \item third quartile (Q3)

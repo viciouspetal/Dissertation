@@ -1,6 +1,6 @@
 \subsection{Data Analysis Implementation}\label{sec:impl-data-analysis}
 \subsubsection{Initial Dataset Analysis}
-Initial analysis of the dataset constructed in section \ref{sec:impl-data-gatherer} revealed that it's comprised of 6547 rows spread across 67 columns, where each column corresponds to a feature. Out of the 67 columns, the vast majority is of numeric type, with only 5 being a text and 1, the prediction target column, referred to as \texttt{is\_bug} being of type boolean.
+Initial analysis of the dataset constructed in section \ref{sec:impl-data-gatherer} revealed that it is comprised of 6547 rows spread across 67 columns, where each column corresponds to a feature. Out of the 67 columns, the vast majority is of numeric type, with only 5 being a text and 1, the prediction target column, referred to as \texttt{is\_bug} being of type boolean.
 
 \subsubsection{Timestamps features transformation}\label{sec:impl-data-analysis:make-file-age}
 As previously mentioned in section \ref{sec:data-available} the \timestamp{} and \prevTimestamp{} representing the time the current file commit was made as well as the last time commit has been made to the file had to be transformed into a single column outlining the age of the file - determining the staleness of it.
@@ -8,7 +8,7 @@ During the transformation, it has been discovered that in 7 instances the result
 At the end of the transformation \timestamp{} and \prevTimestamp{} columns were removed, changing the shape of the dataset to 66 columns instead of initial 67.
 
 \subsubsection{Files deleted}\label{sec:impl-data-analysis:files-deleted}
-Progressively, an analysis of any missing values from all the columns was conducted. The first step was to determine if any of the files committed to having since been deleted. It has been determined by using the \files{} column provided by Sonar server. If the value of the column was not equal to 1 then such file no longer existed in the repository, despite the presence of historical code metrics. As a result, 431 rows were removed from the dataset. It should be noted that it doesn't mean that 431 different files were removed from the dataset as any file could have been committed to multiple times as each such commit would be represented by a row in the dataset. The obsolete file removal left the dataset at 6109 rows in 66 columns.
+Progressively, an analysis of any missing values from all the columns was conducted. The first step was to determine if any of the files committed to having since been deleted. It has been determined by using the \files{} column provided by Sonar server. If the value of the column was not equal to 1 then such file no longer existed in the repository, despite the presence of historical code metrics. As a result, 431 rows were removed from the dataset. It should be noted that it does not mean that 431 different files were removed from the dataset as any file could have been committed to multiple times as each such commit would be represented by a row in the dataset. The obsolete file removal left the dataset at 6109 rows in 66 columns.
 
 \subsubsection{Columns with all values at 0}\label{sec:impl-data-analysis:all-cols-at-0}
 Next step was to check if there were any features present where all values were at 0 value. It has been determined that a column where all values are of 0 value would not contribute towards the prediction and therefore can be removed. The list of 19 removed columns is presented in Table \ref{tbl:zero-value-columns}. This step left the dataset with 6109 rows and 47 columns.
@@ -166,7 +166,7 @@ The first subplot to be analyzed was populated with features relating to code co
     \item \uncoveredConditions{}
     \item \uncoveredLines{}
 \end{itemize}
-and it's correlation statistics can be observed in Figure \ref{fig:correlation-coverage-metrics-subplot}. From the same graph, 4 candidates for feature transformation into a single feature due to high positive correlation with one another can be identified:
+and its correlation statistics can be observed in Figure \ref{fig:correlation-coverage-metrics-subplot}. From the same graph, 4 candidates for feature transformation into a single feature due to high positive correlation with one another can be identified:
 \begin{enumerate}\label{lst:corr-sub:code-coverage-transf-candidates}
     \item \overallBranchCoverage{} and \branchCoverage{}
     \item \overallUncoveredLines{} and \uncoveredLines{}
@@ -387,7 +387,7 @@ The following section will investigate if the following candidates can be transf
     \item \majorViolations{}, \minorViolations{} and \infoViolations{}
 \suspend{enumerate}
 
-Starting with Candidate 8, the relationship between the attributes appears to be strong and a linear one, as can be observed in Figure \ref{fig:3d:candidate8-relationship}. Unfortunately, despite the indications of a strong relationship, there aren't enough data points available to prove it beyond any doubt. The distribution graph, in Figure \ref{fig:candidate8-distribution}, however, clearly states that the distribution of whatever little data points that are available matches perfectly between the three attributes.
+Starting with Candidate 8, the relationship between the attributes appears to be strong and a linear one, as can be observed in Figure \ref{fig:3d:candidate8-relationship}. Unfortunately, despite the indications of a strong relationship, there is an insufficient number of data points available to prove it beyond any doubt. The distribution graph, in Figure \ref{fig:candidate8-distribution}, however, clearly states that the distribution of whatever little data points that are available matches perfectly between the three attributes.
 
 \begin{figure}
     \centering
@@ -426,25 +426,61 @@ However, when drawing from the domain knowledge of Sonar metrics, \violations{} 
 
 \paragraph{Code Duplication Metrics}\label{sec:impl-data-analysis:corr:code-duplication}
 
-\begin{figure}
+\begin{figure}[!h]
     \centering
-    \includegraphics[scale=0.75]{Figures/correlation/Duplication_Metrics_Correlation.png}
+    \includegraphics[scale=0.65]{Figures/correlation/Duplication_Metrics_Correlation.png}
     \caption{Code Duplication Metrics Correlation Subplot}
     \label{fig:correlation-code-duplication-metrics-subplot}
 \end{figure}
 
-Based on the correlation graph for code duplication metrics the following candidate has been chosen for the analysis:
+Based on the correlation graph for code duplication metrics, Figure \ref{fig:correlation-code-duplication-metrics-subplot}, the following candidate has been chosen for the analysis:
 \resume{enumerate}
-    \item \duplicatedBlocks{}, \duplicatedFiles{}, \duplicatedLines{} and \duplicatedLinesDensity{}
+    \item \duplicatedLines{} and \duplicatedLinesDensity{}
+    \item \duplicatedBlocks{} and \duplicatedFiles{} 
 \end{enumerate}
+
+From Figure \ref{fig:candidate10-relationship}, it can be surmised that a weak approximation of a linear relationship is attempted. However, as indicated by the 95\% confidence interval, represented in the figure as a blue overlay on the regression line, there is little relationship between the two attributes. It is curious though that their distribution is similar, as per Figure \ref{fig:candidate10-attrib-distribution} with most of the data points being 0 value. Upon closer inspection it is revealed that values above 0 are distributed differently between the two attributes.
+
+Taking the lack of a linear relationship as well as differing distributions into the account it has been decided against transforming Candidate 10 attributes into a single feature.
+
+\begin{figure}[!h]
+     \centering
+  \includegraphics[scale=0.7]{\figCorrPath/Attribute_Relationship_in_Candidate_10.png}
+    \caption{Relationship between the \duplicatedLines{} and \duplicatedLinesDensity{} attributes}
+    \label{fig:candidate10-relationship}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+   \includegraphics[scale=0.7]{\figCorrPath/Attribute_Distribution_in_Candidate_10.png}
+    \caption{Distribution of \duplicatedLines{} and \duplicatedLinesDensity{} attributes}
+    \label{fig:candidate10-attrib-distribution}
+\end{figure}
+
+The linear relationship in Candidate 11 is even worse than that of Candidate 10, as illustrated in Figure \ref{fig:candidate11-relationship}. Despite the data distribution presented in Figure \ref{fig:candidate11-attrib-distribution} it has again been decided against transforming the two attributes in question, \duplicatedBlocks{} and \duplicatedFiles{}, into a single feature.
+
+An additional step has been taken to plot three of the code duplication metrics on a single graph in order to verify any other relationships that may not have been determined by feature collinearity. To that effect the \duplicatedFiles{}, \duplicatedLines{} and \duplicatedBlocks{} have been plotted together, with the result presented in Figure \ref{fig:3d:dupFiles-dupLines-dupBlocks}. It has been concluded that while a relationship to some degree is present between the attributes listed it does not constitute sufficient grounds for feature transformation.
+
+\begin{figure}[!h]
+     \centering
+  \includegraphics[scale=0.7]{\figCorrPath/Attribute_Relationship_in_Candidate_11.png}
+    \caption{Relationship between the \duplicatedBlocks{} and \duplicatedFiles{} attributes}
+    \label{fig:candidate11-relationship}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+   \includegraphics[scale=0.7]{\figCorrPath/Attribute_Distribution_in_Candidate_11.png}
+    \caption{Distribution of \duplicatedBlocks{} and \duplicatedFiles{} attributes}
+    \label{fig:candidate11-attrib-distribution}
+\end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[scale=0.75]{Figures/correlation/Attribute_Relationship_in_Duplication_Metrics.png}
-    \caption{Relationship between multiple attributes}
-    \label{fig:candidate10-distribution}
+    \includegraphics[scale=0.6]{Figures/three-d/Code-duplication.png}
+    \caption{Relationship between \duplicatedFiles{}, \duplicatedLines{} and \duplicatedBlocks{} attributes}
+    \label{fig:3d:dupFiles-dupLines-dupBlocks}
 \end{figure}
 
-
-\textbf{In conclusion} no strong opportunity for transformation has been found between code duplication metrics as the correlation appears to be of small magnitude. The only exception has been displayed by \duplicatedBlocks{} and \duplicatedFiles{} features that showed a strong negative correlation.
+\textbf{In conclusion} no strong opportunity for transformation has been found between code duplication metrics as the correlation appears to be of small magnitude. As a result no features have been transformed.
 \FloatBarrier

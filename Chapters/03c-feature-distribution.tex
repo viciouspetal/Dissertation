@@ -66,7 +66,7 @@ The change in the data skew of \fileAgeInSec{} can be observed from Figures \ref
     \label{fig:feature-dist:skew:quantile-normal-downsample}
 \end{figure}
 
-Additionally, after scalers have been applied a small difference in the skewness of the data has been observed between up and down-sampled datasets. In general, upsampled datasets had more features exhibiting 0 skewness factor, metric calculated as per formula listed in Section \ref{sec:impl-data-analysis:feature-dist-before-scaling}. Furthermore, the skewness factor for features that didn't achieve the 0 score have been slightly larger in the up-sampled dataset. 
+Additionally, after scalers have been applied a small difference in the skewness of the data has been observed between up and down-sampled datasets. In general, upsampled datasets had more features exhibiting 0 skewness factor, metric calculated as per formula listed in Section \ref{sec:impl-data-analysis:feature-dist-before-scaling}. Furthermore, the skewness factor for features that failed to achieve the 0 score have been slightly larger in the up-sampled dataset. 
 However, given that the differences observed in data distribution after that scaling operation has been carried out were not significant, bar the expected change in \fileAgeInSec{}, it has been decided to carry on with the analysis as is.
 
 \textbf{In conclusion} only in the case of one feature, the \fileAgeInSec{}, the scaling operations have had any significant impact on the distribution of the data and its skewness. Other features, exhibited minute changes that should not affect the underlying analysis.

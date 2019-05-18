@@ -23,7 +23,7 @@ timestamp & continuous, epoch time \\
 prev timestamp & continuous, epoch time \\
 is bug & boolean, True or False \\
 files & ordinal, integer, $\geq{}1$ \\
-sqale debt & ratio, integer, $\geq{}0$ \\
+sqale debt & ratio, integer, $\geq{}0$, Sonar proprietary metric defining overall code quality \\
 statements & ordinal, integer, $\geq{}1$ \\
 violations & ratio, integer, $\geq{}0$ \\ \bottomrule
 \end{tabular}
@@ -103,7 +103,7 @@ The first tool to be used in the data gathering process is Atlassian's JIRA serv
 \begin{itemize}
     \item Story - represents a feature task to be done. Upon completion, it is a fully functional, testable vertical slice of functionality delivering value to end-users
     \item Task - represents an additional development task, such as, but not limited to, setting up test environments, automation of effort, including testing effort, infrastructure maintenance, etc. Does not provide direct value to end users
-    \item Bug - represents issues found in released software, especially when expected and the actual behaviour of a given piece of functionality doesn't match.
+    \item Bug - represents issues found in released software, especially when expected and the actual behaviour of a given piece of functionality does not match.
 \end{itemize}
 Given that Task type tickets are not directly linked to the development life cycle they have been excluded from further analysis and the focus has been placed on Story and Bug type tickets instead.
 
@@ -197,7 +197,7 @@ A very simplistic decision tree for classification has been represented in Figur
     \label{fig:decision-tree-sample}
 \end{figure}
 
-As the generation the tree progresses the classifiers are applied, depending on the features contained in the dataset, and continuously applied to each subset to generate additional nodes iteratively \cite{Bertsimas2017Cart} in each step while at the same time keeping track of the end structure of the tree. To an extent the method could be compared to a flowchart with a significant distinction - no feedback loops are allowed. Therefore, the model is to some extent easy to explain as it is relatively uncomplicated to visualize the end structure of the tree, subject to the number of prediction-contributing features.
+As the generation of the tree progresses the classifiers are applied, depending on the features contained in the dataset, and continuously applied to each subset to generate additional nodes iteratively \cite{Bertsimas2017Cart} in each step while at the same time keeping track of the end structure of the tree. To an extent the method could be compared to a flowchart with a significant distinction - no feedback loops are allowed. Therefore, the model is to some extent easy to explain as it is relatively uncomplicated to visualize the end structure of the tree, subject to the number of prediction-contributing features.
 
 Given the mode of operation, the function implemented is step-wise, not linear, enabling the model to accommodate more complex relationships between the data. 
 Additionally, it makes it less susceptible to the effects of feature collinearity, making it a highly valuable model candidate for datasets with high correlation factor values between features.
@@ -301,6 +301,7 @@ The implementation has been carried out in two steps. In the first step, a tool 
 \input{Chapters/03a-gatherer-implementation.tex}
 
 \input{Chapters/03b-data-analysis-implementation.tex}
+\input{Chapters/03b1-independent-features.tex}
 \input{Chapters/03c-feature-distribution.tex}
 \input{Chapters/03d-outliers.tex}
 \input{Chapters/03e-scalers-impl.tex}
