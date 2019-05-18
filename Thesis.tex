@@ -12,7 +12,6 @@
 \usepackage[nottoc]{tocbibind} % bind bibliography to the table of contents
 \usepackage{verbatim}  % Needed for the "comment" environment to make LaTeX comments
 \usepackage{vector}  % Allows "\bvec{}" and "\buvec{}" for "blackboard" style bold vectors in maths
-% \usepackage[table]{xcolor}
 \usepackage[table,xcdraw]{xcolor}
 
 % additional packages
@@ -25,9 +24,11 @@
 \usepackage{textgreek} % support for greek letters
 \usepackage[section]{placeins} % floatbarrier
 \usepackage[export]{adjustbox} % figure placement adjustments
-% \usepackage{hyperref} % URL highlights
-%\usepackage[colorlinks=true, allcolors=blue]{hyperref} %URL colouring
+\usepackage{hyperref} % URL highlights
+
 \usepackage{mdwlist} % used for customized resuming of numbering on numbered lists
+
+\hypersetup{urlcolor=black, colorlinks=true}  % Colours hyperlinks in black, can be distracting if there are many links and colored blue.
 
 % treating paragraphs as sections by adding headings to them
 \usepackage{titlesec}
@@ -204,9 +205,9 @@ Finally, I would like to thank my family and partner for being a continued inspi
 %% ----------------------------------------------------------------
 \lhead{\emph{List of Tables}}  % Set the left side page header to "List of Tables"
 \listoftables  % Write out the List of Tables
+
+
 \begin{comment}
-
-
 %% ----------------------------------------------------------------
 \setstretch{1.5}  % Set the line spacing to 1.5, this makes the following tables easier to read
 \clearpage  % Start a new page
@@ -232,6 +233,7 @@ Finally, I would like to thank my family and partner for being a continued inspi
 %%
 ----------------------------------------------------------------
 \end{comment}
+\lhead{}  % Clears the left side page header
 \mainmatter	  % Begin normal, numeric (1,2,3...) page numbering
 \pagestyle{fancy}  % Return the page headers back to the "fancy" style
 
