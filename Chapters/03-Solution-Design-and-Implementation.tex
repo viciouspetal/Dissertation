@@ -144,7 +144,7 @@ Finally, \timestamp{} and \prevTimestamp{} were used to calculate staleness of t
 \subsection{Machine Learning Models Utilized}
 
 \subsubsection{Logistic Regression}
-Logistic regression is a type of predictive analysis. It has been selected as it is considered an appropriate classification method when the target variable is binary\cite{Hastie2009OnLogisticRegForBinaryTargetClass}\cite{ridgeEstInLogReg}. 
+Logistic regression is a type of predictive analysis. It has been selected as it is considered an appropriate classification method when the target variable is binary \cite{Hastie2009OnLogisticRegForBinaryTargetClass} \cite{ridgeEstInLogReg}. 
 As part of the analysis, two regularization methods were utilized to both reduce the number of features and to programmatically detect features contributing the most toward the correct classification of the target variable. 
 
 \subsubsection{Linear Model Regularization} 
@@ -171,9 +171,9 @@ Lasso stands for Least Absolute Shrinkage and it is defined as $RSS$ $+$ \textal
 \begin{equation}\label{eq_lasso}
 \sum^n_{i=1}(\hat{y_i}- y_i)^2 + \alpha \sum^n_{j=0}|w_j|
 \end{equation}
-where \textalpha{} refers to the factor of the penalty applied to a feature and $w_i$ refers to the weight of the feature\cite{Hastie2009SpringerOfLasso}.
+where \textalpha{} refers to the factor of the penalty applied to a feature and $w_i$ refers to the weight of the feature \cite{Hastie2009SpringerOfLasso}.
 
-Ridge regression works by adding a penalty factor to square of the magnitude of coefficients\cite{Hastie2009SpringerOfRidge}. It can be represented as:
+Ridge regression works by adding a penalty factor to square of the magnitude of coefficients \cite{Hastie2009SpringerOfRidge}. It can be represented as:
 \begin{equation}\label{eq_ridge}
 \sum^n_{i=1}(\hat{y_i}- y_i)^2 + \alpha \sum^n_{j=0}w_j^2
 \end{equation}
@@ -186,7 +186,7 @@ From the same definition it can be deducted that impact of \textalpha{} will be 
 \end{enumerate}
 
 \subsubsection{Decision Tree Classifier}
-Decision Tree for classification is a non-parametric method of supervised machine learning. Along with Decision Tree Regression, it was first proposed in 1984\cite{breimanCart1984} and it was intended as a top-down approach applied to a given set of data points. To find solutions a decision tree will make a number of sequential, hierarchical, or top-down, decisions about the outcome variable based on the predictor data. 
+Decision Tree for classification is a non-parametric method of supervised machine learning. Along with Decision Tree Regression, it was first proposed in 1984 \cite{breimanCart1984} and it was intended as a top-down approach applied to a given set of data points. To find solutions a decision tree will make a number of sequential, hierarchical, or top-down, decisions about the outcome variable based on the predictor data. 
 
 A very simplistic decision tree for classification has been represented in Figure \ref{fig:decision-tree-sample}. The tree is built top-down, starting from a root node corresponding to the best predictor for the dataset, which branches would extend downwards from. Going down the tree, depending on the position, the nodes would carry a different meaning. Terminal nodes, coloured in green, are points where no further decisions can be made. They are referred to as called leaf nodes. The white nodes represent the decision boundary defining the points at which a classification rule, or classifier, is executed. This method of execution serves in creating a consistent and standardized way of predicting what class should be applied to a given data point as the same rules are applied to any and all available data points.
 
@@ -244,7 +244,7 @@ Min-max data normalization is a method of scaling data by assigning it a value i
 \end{equation}
 where $\hat{a}$ represents the transformed value of an attribute A.
 
-It has been pointed out that this method suffers from uncertainty when normalizing time series data\cite{dataNormalization2014}, however, given that in this context it is not used to normalize time series value it has been included in the analysis.
+It has been pointed out that this method suffers from uncertainty when normalizing time series data \cite{dataNormalization2014}, however, given that in this context it is not used to normalize time series value it has been included in the analysis.
 \paragraph{Decimal Scaling}\label{sec:data-modelling:scalers:max-abs}
 The decimal scaling normalization method works by scaling each feature by its maximum absolute value and can be represented by:
 \begin{equation}
@@ -252,7 +252,7 @@ The decimal scaling normalization method works by scaling each feature by its ma
 \end{equation}
 where $\hat{a}$ represents the transformed value, $a$, the original value and $d$ is the smallest integer where $max(|\hat{a}|<1)$.
 
-Similarly to min-max normalization, as this method also relies on knowing the maximum value of an attribute ahead of time, it has been unsuitable to time series data\cite{dataNormalization2014}. However, again, the attributes scaled do not include time series data it has been deemed appropriate to include it in the course of the analysis.
+Similarly to min-max normalization, as this method also relies on knowing the maximum value of an attribute ahead of time, it has been unsuitable to time series data \cite{dataNormalization2014}. However, again, the attributes scaled do not include time series data it has been deemed appropriate to include it in the course of the analysis.
 
 \paragraph{Z-Score Normalization}\label{sec:data-modelling:scalers:standard}
 This method standardizes the features by removing the mean and scaling the attribute to unit variance. It can be represented y:
@@ -261,12 +261,12 @@ This method standardizes the features by removing the mean and scaling the attri
 \end{equation}
 where $\hat{a}$ represents the transformed value, $\mu(a)$ is the arithmetic mean of a given attribute and $\sigma(a)$ is its standard deviation.
 
-As this method does not rely on knowing the minimum and maximum values ahead of applying the transformation it overcomes the deficiencies of the Min-Max and Decimal Scaling methods\cite{dataNormalization2014}. However, at the same time, it faces difficulties with a non-stationary data series where the mean or standard deviation change over time. Given that during the underlying analysis the data has been static and not continuously undergoing updates or other modifications it has been deemed an appropriate scaling method to include.
+As this method does not rely on knowing the minimum and maximum values ahead of applying the transformation it overcomes the deficiencies of the Min-Max and Decimal Scaling methods \cite{dataNormalization2014}. However, at the same time, it faces difficulties with a non-stationary data series where the mean or standard deviation change over time. Given that during the underlying analysis the data has been static and not continuously undergoing updates or other modifications it has been deemed an appropriate scaling method to include.
 
 \paragraph{Power Transformation - Yeo-Johnson method} \label{sec:data-modelling:scalers:power-yeo-johnson}
 Power data normalization methods are a family of parametric, monotonic transformations aiming to alter given data from any distribution to as close to a Gaussian distribution as possible. As with any data normalization method, it is performed on data in order to reduce variance and minimize skewness.
 
-The Box-Cox method,depicted in equation \ref{eq:box-cox} has been first proposed in 1964\cite{boxCox1964} and has been a very popular method of dealing with distribution variance \cite{YANG200614}. However, it is only applicable to strictly positive data\cite{YANG200614}. 
+The Box-Cox method,depicted in equation \ref{eq:box-cox} has been first proposed in 1964 \cite{boxCox1964} and has been a very popular method of dealing with distribution variance \cite{YANG200614}. However, it is only applicable to strictly positive data \cite{YANG200614}. 
 Additionally, as pointed out by Yeo and Johnson \cite{yeo-johnson-original} despite the fact that Box-Cox method could be modified to approximate normal distribution for negative $\lambda$, however, in those instances the proposed modifications fail when applied to heavily skewed distributions.
 \begin{equation}\label{eq:box-cox}
     \hat{a}^{(\lambda)}=\begin{cases} \frac {{a}^{\lambda } - 1 }{\lambda}& \text{if $\lambda \neq 0$},\\
@@ -286,7 +286,7 @@ Provided the data is indeed heavily skewed, but despite the fact that all of the
 \end{equation}
 
 \paragraph{Quantile Transformation Methods} \label{sec:data-modelling:scalers:quantile}
-Quantile regression has been deemed appropriate for heavily skewed data\cite{quantileNormalizationInSkewedDataAnalysis}, therefore, it has been included as part of the analysis.
+Quantile regression has been deemed appropriate for heavily skewed data \cite{quantileNormalizationInSkewedDataAnalysis}, therefore, it has been included as part of the analysis.
 
 The method is intended to spread out the most frequent data points for a given attribute, thus reducing the impact of marginal outliers.
 

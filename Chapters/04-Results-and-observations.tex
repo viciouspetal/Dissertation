@@ -1,8 +1,7 @@
 \chapter{Results and Observations}\label{chp:results-and-observations}
-It should be noted that due to the randomness of the resampling and scaling operations it is assumed that the exact same results will not be obtained between subsequent runs of the prediction model. However, the results obtained from multiple runs as part of the research have been of consistent magnitude.
+It should be noted that due to the randomness of the resampling and scaling operations the exact same results will not be obtained between subsequent runs of the prediction model. However, the results obtained from multiple runs as part of the research have been of consistent magnitude.
 \section{Logistic Regression Results}\label{sec:results:log-reg}
-% \todo{Need to Speak to why decision tree results were so much better than those of logistic regression}
-% \todo{- What are the results in, F1? TF/TP, RSS?}
+
 Due to the implementation specification of the Logistic Regression algorithm forcing L2 regularization upon the model by default it was not possible to obtain non-regularized results for comparison.
 
 The scoring function provided by the underlying implementation of the Sci-Kit Learn library used defines it as the mean accuracy of correctly predicting the target value ($y$) for a given set of features ($X$). It is presented as a decimal number in the range of $ 0$ to $1$, however, for the purpose of defining it as percentage value all scores from underlying models have been multiplied by $100\%$.
@@ -13,7 +12,7 @@ On average the dataset where the upsampling method was used to achieve class bal
 
 From regularization point of view, L2 was more successful on average.
 
-The probability of class 0 and 1 class, corresponding to a given file being a bug or not, has been consistently averaged at 50\% for each class across all datasets, normalization and regularization methods. 
+The probability of predicting 0 or 1 class, corresponding to a given file containing a bug or not, has been consistently averaged at 50\% for each class across all datasets, regardless or normalization and regularization methods utilized. 
 \begin{table}[!h]
 \centering
 \caption{Logistic Regression Results}
@@ -54,7 +53,7 @@ quantile-uniform & 99.55 & 90.84 \\ \bottomrule
 \end{tabular}
 \end{table}
 
-The difference in prediction accuracy is expected to have come from the size of the data sample under analysis. To reiterate after the Section \ref{sec:impl-data-analysis:resampling}, in the case of downsampled dataset there were only 1484 records available while the upsampled dataset had a far superior sample size of 10734. Given that the upsampled dataset is over 7 times the size of the downsampled one it is expected that the former will provide greater prediction accuracy.
+The difference in prediction accuracy is expected to have come from the size of the data sample under analysis. To reiterate after the Section \ref{sec:impl-data-analysis:resampling}, in the case of downsampled dataset there were only 1484 records available while the upsampled dataset had a far superior sample size of 10734. Given that the upsampled dataset is over seven times the size of the downsampled one it is expected that the former will provide greater prediction accuracy.
 
 \section{Comparison of model results}
 From the results compiled for individual models, sections \ref{sec:results:log-reg} and \ref{sec:results:decision-tree}, it is clearly visible that the Decision Tree Classifier was significantly more successful at obtaining accurate predictions. 
